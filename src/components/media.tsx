@@ -1,16 +1,8 @@
 "use client";
 
 import Image from "next/image";
-import { ExternalLink, Play } from "lucide-react";
+import { Play } from "lucide-react";
 import { useState } from "react";
-
-const driveEmbed = (id: string) => `https://drive.google.com/file/d/${id}/preview`;
-const driveView = (id: string) => `https://drive.google.com/file/d/${id}/view`;
-
-const DRIVE_VIDEOS = [
-  { id: "1bE0L5L7XEwqtIOhguz5sQ--NwK3q8pK7", title: "Training video: part 1", sub: "Live practical clip" },
-  { id: "1VV9GYZIKI1XDyIhp7CWAVF1upYrQiBt4", title: "Training video: part 2", sub: "Live practical clip" },
-];
 
 function PlayDisc({ size = "lg" }: { size?: "lg" | "sm" }) {
   return (
@@ -74,66 +66,46 @@ export function LocalVideo({
   );
 }
 
-/** Google Drive preview embed. Loads the iframe only after the click. */
-function DriveVideo({ id, title, sub }: { id: string; title: string; sub: string }) {
-  const [on, setOn] = useState(false);
-  return (
-    <div>
-      <div className="group relative aspect-video overflow-hidden rounded-2xl border border-white/10 bg-[#0a1120]">
-        {on ? (
-          <iframe
-            className="absolute inset-0 h-full w-full"
-            src={driveEmbed(id)}
-            title={title}
-            allow="autoplay; fullscreen"
-            allowFullScreen
-          />
-        ) : (
-          <button
-            type="button"
-            onClick={() => setOn(true)}
-            aria-label={`Play video: ${title}`}
-            className="absolute inset-0 grid h-full w-full place-items-center bg-[radial-gradient(120%_120%_at_20%_0%,rgba(244,80,0,0.28),transparent_55%),linear-gradient(160deg,#16233d,#0a1120)]"
-          >
-            <span className="flex flex-col items-center gap-2.5">
-              <PlayDisc size="sm" />
-              <span className="text-[13px] font-bold text-white">{title}</span>
-            </span>
-          </button>
-        )}
-      </div>
-      <div className="mt-2 flex items-center justify-between gap-3 text-[12px] text-white/60">
-        <span>{sub}</span>
-        <a
-          href={driveView(id)}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-flex items-center gap-1 font-semibold text-white/80 transition hover:text-white"
-        >
-          Open in Drive <ExternalLink className="h-3 w-3" strokeWidth={2} />
-        </a>
-      </div>
-    </div>
-  );
-}
+type Clip = { src: string; poster: string; title: string; caption: string };
 
-/** Featured promo (local file) + the two Drive training videos. */
+const MAIN_CLIP: Clip = {
+  src: "/videos/training-main.mp4",
+  poster: "/media/poster-main.jpg",
+  title: "Watch live EV diagnostics on a premium car",
+  caption: "Full practical walkthrough, about 3 minutes",
+};
+
+const SIDE_CLIPS: Clip[] = [
+  {
+    src: "/videos/training-funnel.mp4",
+    poster: "/media/poster-funnel.jpg",
+    title: "EV systems and scanner basics",
+    caption: "Quick overview, about 1 minute",
+  },
+  {
+    src: "/videos/foundation-promo.mp4",
+    poster: "/media/promo-poster.jpg",
+    title: "Foundation Pack course preview",
+    caption: "20-second preview with Hindi captions",
+  },
+];
+
+/** Featured practical video + two shorter clips. All files are self-hosted. */
 export function VideoShowcase() {
   return (
     <div className="mt-6 grid gap-5 lg:grid-cols-[1.35fr_1fr] lg:items-start lg:gap-6">
       <div className="h-reveal">
         <LocalVideo
-          src="/videos/foundation-promo.mp4"
-          poster="/media/promo-poster.jpg"
-          title="Watch the 20-second course preview"
+          {...MAIN_CLIP}
           className="border border-white/10 shadow-[0_24px_60px_rgba(0,0,0,0.45)]"
         />
-        <p className="mt-2 text-[12px] text-white/60">Course preview with Hindi captions</p>
+        <p className="mt-2 text-[12px] text-white/60">{MAIN_CLIP.caption}</p>
       </div>
       <div className="grid gap-5">
-        {DRIVE_VIDEOS.map((v, i) => (
-          <div key={v.id} className="h-reveal" style={{ transitionDelay: `${(i + 1) * 90}ms` }}>
-            <DriveVideo {...v} />
+        {SIDE_CLIPS.map((c, i) => (
+          <div key={c.src} className="h-reveal" style={{ transitionDelay: `${(i + 1) * 90}ms` }}>
+            <LocalVideo {...c} className="border border-white/10" />
+            <p className="mt-2 text-[12px] text-white/60">{c.caption}</p>
           </div>
         ))}
       </div>
