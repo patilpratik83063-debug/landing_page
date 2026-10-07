@@ -293,7 +293,7 @@ export function CourseFaq({
 export function AfterPayment({ pack }: { pack: string }) {
   const steps = [
     ["1", "WhatsApp par confirm karo", `Neeche button dabao — "${pack}" likha message ready milega, bas send karo.`],
-    ["2", "Payment complete karo", "Team tumhe secure payment link / QR bhejegi — UPI, card sab chalega."],
+    ["2", "Payment complete karo", "Pay button dabao — UPI, card, netbanking se secure payment karo. Paise seedha IAD account me jate hain."],
     ["3", "Access link turant pao", "Payment ke turant baad training videos ka access link + joining details WhatsApp par mil jayengi."],
   ] as const;
   return (
