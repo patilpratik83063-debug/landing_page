@@ -1,6 +1,11 @@
 "use client";
 
+import { Play } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
+import { CALL_NUMBER, useReveal, useScrolled } from "@/components/course-blocks";
+import { RecognitionWall, VideoShowcase } from "@/components/media";
 import PayButton from "@/components/pay-button";
 
 const PAYMENT_URL = "https://workshop.indianautomobiledoctor.com/payment";
@@ -20,78 +25,49 @@ function getNextDeadline(): number {
   return d.getTime() - istOffsetMs;
 }
 
-type TimeLeft = { h: string; m: string; s: string };
+type TimeLeft = {
+  h: string;
+  m: string;
+  s: string;
+  /** "Tonight" / "Tomorrow", computed after mount so SSR and client markup match */
+  when: string;
+  dateShort: string;
+  dateLong: string;
+};
+
+const IST = "Asia/Kolkata";
+const pad = (n: number) => String(n).padStart(2, "0");
 
 function useCountdown(): TimeLeft {
-  const [deadline] = useState<number>(() => getNextDeadline());
-  const [now, setNow] = useState<number>(() => Date.now());
+  const [state, setState] = useState<{ deadline: number; now: number } | null>(null);
   useEffect(() => {
-    const t = setInterval(() => setNow(Date.now()), 1000);
+    const tick = () => {
+      const now = Date.now();
+      // roll over to the next 8 PM IST once the current one passes (evergreen)
+      setState((prev) => ({
+        deadline: prev && prev.deadline > now ? prev.deadline : getNextDeadline(),
+        now,
+      }));
+    };
+    tick();
+    const t = setInterval(tick, 1000);
     return () => clearInterval(t);
   }, []);
-  const diff = Math.max(0, deadline - now);
-  const pad = (n: number) => String(n).padStart(2, "0");
+
+  if (!state) {
+    return { h: "--", m: "--", s: "--", when: "Tonight", dateShort: "Tonight", dateLong: "Tonight" };
+  }
+  const diff = Math.max(0, state.deadline - state.now);
+  const d = new Date(state.deadline);
+  const dayKey = (x: Date) => x.toLocaleDateString("en-CA", { timeZone: IST });
   return {
     h: pad(Math.floor(diff / 3600000)),
     m: pad(Math.floor((diff % 3600000) / 60000)),
     s: pad(Math.floor((diff % 60000) / 1000)),
+    when: dayKey(d) === dayKey(new Date(state.now)) ? "Tonight" : "Tomorrow",
+    dateShort: d.toLocaleDateString("en-IN", { day: "numeric", month: "short", timeZone: IST }),
+    dateLong: d.toLocaleDateString("en-IN", { day: "numeric", month: "long", year: "numeric", timeZone: IST }),
   };
-}
-
-/* Bulletproof scroll-reveal: elements stay VISIBLE by default.
-   Hidden state is applied via JS only to below-fold items,
-   so content can never get stuck invisible. */
-function useReveal() {
-  useEffect(() => {
-    const els = Array.from(
-      document.querySelectorAll<HTMLElement>(".h-reveal")
-    );
-    els.forEach((el) => {
-      const r = el.getBoundingClientRect();
-      if (r.top > window.innerHeight * 0.94) el.classList.add("h-pre");
-    });
-    const io = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((e) => {
-          const t = e.target as HTMLElement;
-          if (e.isIntersecting) {
-            t.classList.add("is-visible");
-            // clear stagger delay after entrance so hovers stay snappy
-            window.setTimeout(() => {
-              t.style.transitionDelay = "0ms";
-            }, 750);
-            io.unobserve(t);
-          }
-        });
-      },
-      { threshold: 0, rootMargin: "0px 0px -6% 0px" }
-    );
-    els.forEach((el) => io.observe(el));
-    // safety net: reveal anything missed after 2.5s
-    const fallback = window.setTimeout(() => {
-      document
-        .querySelectorAll<HTMLElement>(".h-reveal.h-pre:not(.is-visible)")
-        .forEach((el) => {
-          const r = el.getBoundingClientRect();
-          if (r.top < window.innerHeight) el.classList.add("is-visible");
-        });
-    }, 2500);
-    return () => {
-      io.disconnect();
-      window.clearTimeout(fallback);
-    };
-  }, []);
-}
-
-function useScrolled(threshold = 8) {
-  const [s, setS] = useState(false);
-  useEffect(() => {
-    const onScroll = () => setS(window.scrollY > threshold);
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, [threshold]);
-  return s;
 }
 
 function CountUp({ to, suffix }: { to: number; suffix: string }) {
@@ -130,12 +106,12 @@ function CountUp({ to, suffix }: { to: number; suffix: string }) {
 }
 
 const PROOFS = [
-  { n: "Rahul Sharma — Delhi", msg: "Just booked the EV masterclass seat!" },
-  { n: "Amit Verma — Mumbai", msg: "Booked for my garage team of 3" },
-  { n: "Suresh Kumar — Jaipur", msg: "Joined after watching demo video" },
-  { n: "Imran Khan — Hyderabad", msg: "Just grabbed the ₹29 offer" },
-  { n: "Vikash Yadav — Lucknow", msg: "ITI student, excited for EV career" },
-  { n: "Priya Singh — Kolkata", msg: "Booked evening batch seat" },
+  { n: "Rahul Sharma - Delhi", msg: "Just booked the EV masterclass seat!" },
+  { n: "Amit Verma - Mumbai", msg: "Booked for my garage team of 3" },
+  { n: "Suresh Kumar - Jaipur", msg: "Joined after watching demo video" },
+  { n: "Imran Khan - Hyderabad", msg: "Just grabbed the ₹29 offer" },
+  { n: "Vikash Yadav - Lucknow", msg: "ITI student, excited for EV career" },
+  { n: "Priya Singh - Kolkata", msg: "Booked evening batch seat" },
 ];
 
 const TESTIMONIALS = [
@@ -158,10 +134,10 @@ const GALLERY = [
 
 const FAQS = [
   { q: "Is this masterclass free?", a: "No. The seat price is ₹29 (founder batch, worth ₹999)." },
-  { q: "Is this for beginners?", a: "Yes. Beginner, ITI / Diploma / Engineering student, mechanic, technician, garage owner or entrepreneur — session simple Hindi / Hinglish mein hoga." },
+  { q: "Is this for beginners?", a: "Yes. Beginner, ITI / Diploma / Engineering student, mechanic, technician, garage owner or entrepreneur - session simple Hindi / Hinglish mein hoga." },
   { q: "Will I get certified after only this masterclass?", a: "Masterclass gives you the complete 60-day roadmap. Certification needs the full practical training program." },
   { q: "Is job, funding or income guaranteed?", a: "No. Outcomes depend on your skill, effort, training completion, market, location, interview performance and execution." },
-  { q: "What will I learn?", a: "EV, BS6, Hybrid, diagnostics, ECU/ECM programming, garage setup, career options and the 60-day roadmap — clear overview in 90 minutes." },
+  { q: "What will I learn?", a: "EV, BS6, Hybrid, diagnostics, ECU/ECM programming, garage setup, career options and the 60-day roadmap - clear overview in 90 minutes." },
   { q: "How do I get joining details?", a: "Payment ke baad WhatsApp + Email par joining link milta hai." },
 ];
 
@@ -190,6 +166,7 @@ export default function Home() {
   const [proofIdx, setProofIdx] = useState(0);
   const [showProof, setShowProof] = useState(false);
   const [videoOn, setVideoOn] = useState(false);
+  const [thumb, setThumb] = useState("maxresdefault");
   const [faqOpen, setFaqOpen] = useState<number | null>(0);
   const headerShadow = useScrolled(8);
   useReveal();
@@ -224,8 +201,11 @@ export default function Home() {
     <main className="min-h-screen w-full overflow-x-clip bg-white pb-[76px] text-[#131a26]">
       {/* booking toast */}
       <div
-        className={`fixed bottom-[84px] left-3 z-[60] flex max-w-[290px] items-center gap-2.5 rounded-xl border border-[#eadfd2] bg-white p-3 shadow-[0_12px_32px_rgba(19,26,38,0.16)] transition-transform duration-500 ${
-          showProof ? "translate-x-0" : "-translate-x-[320px]"
+        role="status"
+        aria-live="polite"
+        aria-hidden={!showProof}
+        className={`pointer-events-none fixed bottom-[84px] left-3 z-[60] flex max-w-[290px] items-center gap-2.5 rounded-xl border border-[#eadfd2] bg-white p-3 shadow-[0_12px_32px_rgba(19,26,38,0.16)] transition-transform duration-500 ${
+          showProof ? "translate-x-0" : "-translate-x-[340px]"
         }`}
       >
         <span className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-[#131a26] text-[13px] font-bold text-white">
@@ -240,7 +220,7 @@ export default function Home() {
 
       {/* top bar */}
       <div className="bg-[#131a26] px-3 py-2 text-center text-[11.5px] font-semibold text-white sm:text-[13px]">
-        Live EV career masterclass — 28th June, 8 PM
+        Live EV career masterclass, {time.when} 8 PM IST
         <span className="ml-2 rounded-md bg-[#f45000] px-2 py-0.5 text-[11px] font-bold">Just ₹29</span>
       </div>
 
@@ -263,8 +243,8 @@ export default function Home() {
             </span>
           </div>
           <a
-            href={PAYMENT_URL}
-            className="rounded-lg bg-[#131a26] px-3.5 py-2 text-[12px] font-bold text-white transition hover:-translate-y-px hover:bg-black hover:shadow-lg"
+            href="#book"
+            className="rounded-lg bg-[#131a26] px-4 py-2 text-[12px] font-bold text-white transition hover:-translate-y-px hover:bg-black hover:shadow-lg active:translate-y-0"
           >
             Book seat
           </a>
@@ -286,11 +266,11 @@ export default function Home() {
                   <path d="M3 7 Q 60 1 110 5 T 217 4" fill="none" stroke="#f45000" strokeWidth="3.5" strokeLinecap="round" opacity="0.45" />
                 </svg>
               </span>{" "}
-              in 60 days — earn up to ₹50,000/month
+              in 60 days - earn up to ₹50,000/month
             </h1>
             <p className="h-reveal mx-auto mt-3 max-w-xl text-[13.5px] leading-relaxed text-[#3d4756] sm:text-[15px] lg:mx-0">
               EV battery, BMS, motor controller, BS6 diagnostics, hybrid tech &amp; scanner-based
-              troubleshooting — sikhiye step-by-step, zero se.
+              troubleshooting - sikhiye step-by-step, zero se.
             </p>
             <div className="h-reveal mt-5 hidden max-w-md lg:block">
               <BookButton />
@@ -306,7 +286,7 @@ export default function Home() {
               <div className="flex items-center justify-between gap-3 px-4 py-3.5">
                 <div>
                   <p className="text-[10px] font-bold uppercase tracking-[1.5px] text-[#5b6572]">Next masterclass</p>
-                  <p className="font-display mt-0.5 text-[22px] font-bold leading-none">28th June · 8:00 PM</p>
+                  <p className="font-display mt-0.5 text-[22px] font-bold leading-none">{time.dateShort} · 8:00 PM</p>
                 </div>
                 <div className="text-right">
                   <p className="text-[10px] font-bold uppercase tracking-[1.5px] text-[#5b6572]">Duration</p>
@@ -327,19 +307,32 @@ export default function Home() {
             <div className="h-reveal group mt-3">
               <div
                 className="relative aspect-video cursor-pointer overflow-hidden rounded-2xl border border-[#131a26]/10 bg-[#0e1626] shadow-[0_18px_44px_rgba(19,26,38,0.18)]"
+                role={videoOn ? undefined : "button"}
+                tabIndex={videoOn ? undefined : 0}
+                aria-label={videoOn ? undefined : "Play video: EV Career Revolution Masterclass"}
                 onClick={() => setVideoOn(true)}
+                onKeyDown={(e) => {
+                  if (!videoOn && (e.key === "Enter" || e.key === " ")) {
+                    e.preventDefault();
+                    setVideoOn(true);
+                  }
+                }}
               >
                 {!videoOn ? (
                   <>
-                    <img
-                      src={`https://img.youtube.com/vi/${YT_ID}/maxresdefault.jpg`}
+                    <Image
+                      src={`https://img.youtube.com/vi/${YT_ID}/${thumb}.jpg`}
                       alt="EV Career Revolution Masterclass"
-                      className="absolute inset-0 h-full w-full object-cover opacity-80 transition duration-500 group-hover:scale-[1.02] group-hover:opacity-90"
+                      fill
+                      priority
+                      sizes="(min-width: 1024px) 45vw, 100vw"
+                      onError={() => setThumb("hqdefault")}
+                      className="object-cover opacity-80 transition duration-500 group-hover:scale-[1.02] group-hover:opacity-90"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-transparent" />
                     <div className="absolute inset-0 flex flex-col items-center justify-center gap-2.5">
-                      <span className="grid h-16 w-16 place-items-center rounded-full bg-[#e11d2e] pl-1 text-[22px] text-white shadow-xl transition duration-300 group-hover:scale-110">
-                        ▶
+                      <span className="grid h-16 w-16 place-items-center rounded-full bg-[#f45000] text-white shadow-[0_10px_30px_rgba(244,80,0,0.5)] ring-4 ring-white/25 transition duration-300 group-hover:scale-110">
+                        <Play className="ml-1 h-7 w-7" fill="currentColor" strokeWidth={0} />
                       </span>
                       <p className="px-6 text-[12.5px] font-semibold text-white">
                         Watch: how EV technicians actually get work
@@ -400,8 +393,25 @@ export default function Home() {
         </p>
       </div>
 
+      {/* RECOGNITION */}
+      <section className="bg-white px-4 py-12 sm:px-6 lg:py-16">
+        <div className="mx-auto w-full max-w-6xl">
+          <div className="max-w-2xl">
+            <p className="h-reveal text-[11px] font-bold uppercase tracking-[2px] text-[#f45000]">Trusted across Odisha</p>
+            <h2 className="h-reveal mt-1 text-[26px] font-extrabold tracking-tight sm:text-[34px]">
+              Awards, job fairs and students on stage
+            </h2>
+            <p className="h-reveal mt-2 max-w-xl text-[14px] leading-relaxed text-[#3d4756]">
+              Real moments from the people who train you: state awards, government job fairs and
+              Odisha Skills, where our students took home certificates and medals.
+            </p>
+          </div>
+          <RecognitionWall />
+        </div>
+      </section>
+
       {/* DETAILS */}
-      <section className="bg-[#0e1626] px-4 py-10 text-white sm:px-6 lg:py-14">
+      <section id="book" className="scroll-mt-16 bg-[#0e1626] px-4 py-10 text-white sm:px-6 lg:py-14">
         <div className="mx-auto w-full max-w-6xl">
           <div className="max-w-2xl">
             <p className="h-reveal text-[11px] font-bold uppercase tracking-[2px] text-white/50">The details</p>
@@ -411,7 +421,7 @@ export default function Home() {
           </div>
           <div className="mt-5 grid grid-cols-2 gap-2.5 lg:grid-cols-4">
             {[
-              ["Date", "28th June 2026"],
+              ["Date", time.dateLong],
               ["Format", "Live Zoom call"],
               ["Duration", "90 min + Q&A"],
               ["Language", "Hindi / Hinglish"],
@@ -453,12 +463,12 @@ export default function Home() {
           </div>
           <ol className="mt-5 grid gap-x-10 md:grid-cols-2">
             {[
-              ["The 60-day roadmap", "Certified EV technician banne ka exact step-by-step plan — kya, kab, kaise."],
+              ["The 60-day roadmap", "Certified EV technician banne ka exact step-by-step plan - kya, kab, kaise."],
               ["Battery, BMS, motor", "Ye 3 skills aapko normal mechanic se 10x valuable banati hain. Kaise seekhein, live samjhiye."],
-              ["BS6 · EV · Hybrid, simplified", "Confusing jargon nahi — kaam ki भाषा mein samajh, taaki customer ko confident jawab de sako."],
+              ["BS6 · EV · Hybrid, simplified", "Confusing jargon nahi - kaam ki भाषा mein samajh, taaki customer ko confident jawab de sako."],
               ["Scanner + OBD diagnostics", "Live data reading, fault codes, aur woh mistakes jo 90% beginners karte hain."],
-              ["Job, internship, apna garage", "Naukri, freelance diagnosis ya EV garage — teeno raste, aur pehla kadam kya ho."],
-              ["Outdated hone se bachna", "Kaunsi skills chhodni hain, kaunsi pakadni hain — 2026 ke hisaab se seedhi baat."],
+              ["Job, internship, apna garage", "Naukri, freelance diagnosis ya EV garage - teeno raste, aur pehla kadam kya ho."],
+              ["Outdated hone se bachna", "Kaunsi skills chhodni hain, kaunsi pakadni hain - 2026 ke hisaab se seedhi baat."],
             ].map(([t, d], i) => (
               <li
                 key={t}
@@ -481,6 +491,24 @@ export default function Home() {
         </div>
       </section>
 
+      {/* VIDEOS */}
+      <section className="bg-[#0e1626] px-4 py-12 text-white sm:px-6 lg:py-16">
+        <div className="mx-auto w-full max-w-6xl">
+          <div className="max-w-2xl">
+            <h2 className="h-reveal text-[26px] font-extrabold tracking-tight text-white sm:text-[34px]">
+              Dekho, phir join karo
+            </h2>
+            <p className="h-reveal mt-2 max-w-xl text-[14px] leading-relaxed text-white/65">
+              Course preview aur live practical videos. Dekh lo training kaisi hoti hai, phir seat book karo.
+            </p>
+          </div>
+          <VideoShowcase />
+          <div className="h-reveal mt-7 max-w-md">
+            <BookButton small />
+          </div>
+        </div>
+      </section>
+
       {/* TESTIMONIALS */}
       <section className="bg-[#fff6ec] px-4 py-10 sm:px-6 lg:py-14">
         <div className="mx-auto w-full max-w-6xl">
@@ -490,7 +518,7 @@ export default function Home() {
               Log kya keh rahe hain
             </h2>
             <p className="h-reveal mt-1.5 text-[13px] text-[#5b6572]">
-              Students, mechanics aur garage owners — IAD training ecosystem se.
+              Students, mechanics aur garage owners - IAD training ecosystem se.
             </p>
           </div>
           <div className="mt-5 grid grid-cols-1 gap-3 min-[420px]:grid-cols-2 lg:grid-cols-3">
@@ -500,12 +528,13 @@ export default function Home() {
                 className="h-reveal card-lift overflow-hidden rounded-xl border border-[#eadfd2] bg-white"
                 style={{ transitionDelay: `${(i % 3) * 80}ms` }}
               >
-                <div className="aspect-[4/5] overflow-hidden bg-[#e9e2d4] min-[420px]:aspect-[4/5]">
-                  <img
+                <div className="relative aspect-[4/5] overflow-hidden bg-[#e9e2d4]">
+                  <Image
                     src={t.img}
                     alt={t.title}
-                    loading="lazy"
-                    className="h-full w-full object-cover transition duration-500 hover:scale-[1.03]"
+                    fill
+                    sizes="(min-width: 1024px) 380px, (min-width: 420px) 50vw, 100vw"
+                    className="object-cover transition duration-500 hover:scale-[1.03]"
                   />
                 </div>
                 <figcaption className="p-3">
@@ -533,11 +562,11 @@ export default function Home() {
           </div>
           <ul className="mt-5 grid gap-2.5 md:grid-cols-2">
             {[
-              "BS6 / EV / Hybrid dekh ke lagta hai — “ye to mere bas ka nahi”?",
+              "BS6 / EV / Hybrid dekh ke lagta hai - “ye to mere bas ka nahi”?",
               "Diagnose karne me dikkat hoti hai, scanner haath me leke dar lagta hai?",
               "Lagta hai technology itni fast badal rahi, meri skill purani pad rahi hai?",
               "Mehnat poori, par income aur growth wahi atki hui hai?",
-              "Mechanic, student ya garage owner ho — par future ka clear plan nahi hai?",
+              "Mechanic, student ya garage owner ho - par future ka clear plan nahi hai?",
             ].map((t, i) => (
               <li
                 key={t}
@@ -550,7 +579,7 @@ export default function Home() {
             ))}
           </ul>
           <p className="h-reveal mt-4 max-w-2xl rounded-xl bg-[#fff6ec] p-4 text-center text-[13.5px] font-semibold md:text-left">
-            Agar ek bhi point “haan, ye to mai hu” laga — to ye ₹29 wali evening aapke liye hi hai.
+            Agar ek bhi point “haan, ye to mai hu” laga - to ye ₹29 wali evening aapke liye hi hai.
           </p>
           <div className="h-reveal mt-5 max-w-md">
             <BookButton small />
@@ -567,13 +596,22 @@ export default function Home() {
               Kaunsi technologies cover hongi
             </h2>
           </div>
-          <div className="mt-5 grid gap-2.5 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="h-reveal relative mt-5 aspect-[1024/492] overflow-hidden rounded-2xl border border-white/10 shadow-[0_24px_60px_rgba(0,0,0,0.4)]">
+            <Image
+              src="/media/workshop-panels.jpg"
+              alt="Training overview: ECM repair, BS6 diagnostics, EV and hybrid high-voltage systems, professional workshop"
+              fill
+              sizes="(min-width: 1152px) 1100px, 100vw"
+              className="object-cover"
+            />
+          </div>
+          <div className="mt-3 grid gap-2.5 sm:grid-cols-2 lg:grid-cols-3">
             {[
               ["Battery + BMS", "Pack assembly, wiring, cell balancing, thermal basics."],
               ["Motor + controller", "BLDC / hub motor, winding, programming, fault tracing."],
               ["Diagnostics", "OBD scanners, CAN-bus, live data, troubleshooting."],
               ["Workshop practice", "Electric 2W / 3W kholna-jodna, real floor work."],
-              ["Garage setup", "Layout, tools, workflow, compliance — business lens se."],
+              ["Garage setup", "Layout, tools, workflow, compliance - business lens se."],
               ["Supplier + career", "Spare network, placement direction, next steps."],
             ].map(([t, d], i) => (
               <div
@@ -592,10 +630,10 @@ export default function Home() {
             <h3 className="h-reveal mt-1 text-[20px] font-extrabold text-white sm:text-[24px]">8 hafte, 4 steps</h3>
             <ol className="mt-5">
               {[
-                ["1–2", "Basics pakke karo", "Circuit, multimeter, motor, high-voltage safety."],
-                ["3–4", "Battery master karo", "Lithium-ion, spot welding, pack + BMS programming."],
-                ["5–6", "Diagnostics seekho", "Wiring, sensors, OBD se fault pakadna + clear karna."],
-                ["7–8", "Real kaam + setup", "Poori gaadi teardown, garage planning, certification."],
+                ["1-2", "Basics pakke karo", "Circuit, multimeter, motor, high-voltage safety."],
+                ["3-4", "Battery master karo", "Lithium-ion, spot welding, pack + BMS programming."],
+                ["5-6", "Diagnostics seekho", "Wiring, sensors, OBD se fault pakadna + clear karna."],
+                ["7-8", "Real kaam + setup", "Poori gaadi teardown, garage planning, certification."],
               ].map(([w, t, d], i) => (
                 <li
                   key={w}
@@ -629,12 +667,13 @@ export default function Home() {
             <h2 className="h-reveal mt-1 text-[24px] font-extrabold tracking-tight sm:text-[30px]">Sikha kaun raha hai?</h2>
           </div>
           <div className="h-reveal card-lift mx-auto mt-5 max-w-3xl overflow-hidden rounded-2xl border border-[#eadfd2] sm:grid sm:grid-cols-[240px_1fr]">
-            <div className="aspect-[4/3] overflow-hidden bg-[#e9e2d4] sm:aspect-auto sm:min-h-[280px]">
-              <img
+            <div className="relative aspect-[4/3] overflow-hidden bg-[#e9e2d4] sm:aspect-auto sm:min-h-[280px]">
+              <Image
                 src={`${IMG_BASE}/WhatsApp-Image-2026-05-13-at-11.03.18-AM.jpeg`}
-                alt="Mr. SK Salman Khurshid — Founder IAD"
-                className="h-full w-full object-cover object-top transition duration-500 hover:scale-[1.02]"
-                loading="lazy"
+                alt="Mr. SK Salman Khurshid, Founder of Indian Automobile Doctor"
+                fill
+                sizes="(min-width: 640px) 240px, 100vw"
+                className="object-cover object-top transition duration-500 hover:scale-[1.02]"
               />
             </div>
             <div className="p-5 sm:p-6">
@@ -642,7 +681,7 @@ export default function Home() {
               <p className="mt-0.5 text-[12px] font-semibold text-[#f45000]">Founder & CEO, Automobile Doctor India Pvt. Ltd.</p>
               <p className="mt-3 text-[13px] leading-relaxed text-[#3d4756]">
                 20+ saal auto market me. 1000+ students train kiye, 76,000+ auto community serve ki.
-                BS6 · EV · Hybrid ka poora tajurba — ek shaam me, seedhi भाषा me.
+                BS6 · EV · Hybrid ka poora tajurba - ek shaam me, seedhi भाषा me.
               </p>
               <div className="mt-3 flex flex-wrap gap-1.5">
                 {["1000+ students", "20+ yrs", "76k+ community"].map((b) => (
@@ -668,12 +707,13 @@ export default function Home() {
                 className="h-reveal group"
                 style={{ transitionDelay: `${(i % 3) * 70}ms` }}
               >
-                <div className="aspect-[4/3] overflow-hidden rounded-xl border border-[#eadfd2] bg-[#e9e2d4]">
-                  <img
+                <div className="relative aspect-[4/3] overflow-hidden rounded-xl border border-[#eadfd2] bg-[#e9e2d4]">
+                  <Image
                     src={g.img}
                     alt={g.t}
-                    loading="lazy"
-                    className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
+                    fill
+                    sizes="(min-width: 1152px) 380px, (min-width: 640px) 33vw, 50vw"
+                    className="object-cover transition duration-500 group-hover:scale-105"
                   />
                 </div>
                 <figcaption className="mt-1.5 text-[11.5px] font-bold">{g.t}</figcaption>
@@ -746,7 +786,7 @@ export default function Home() {
                         open ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"
                       }`}
                     >
-                      <div className="overflow-hidden">
+                      <div className="overflow-hidden" inert={!open}>
                         <p className="px-4 pb-4 text-[12.5px] leading-relaxed text-[#3d4756]">{f.a}</p>
                       </div>
                     </div>
@@ -767,26 +807,30 @@ export default function Home() {
           <div>
             <p className="text-[13px] font-bold text-white">Indian Automobile Doctor (IAD)</p>
             <p className="mt-2 max-w-md">20+ saal se auto market me. EV, BS6, Hybrid, diagnostics aur ECU programming ki practical training.</p>
-            <p className="mt-2">Call: <span className="text-white/85">9827847466</span> · Email: <span className="text-white/85">hello@indianautomobiledoctor.com</span></p>
-          <p className="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-[12px] font-bold">
-            <a href="/starter" className="text-white/85 underline hover:text-white">Foundation Pack @ ₹999 →</a>
-            <a href="/mastery" className="text-white/85 underline hover:text-white">Mastery Pack @ ₹4,999 →</a>
-          </p>
+            <p className="mt-2">
+              Call / WhatsApp: <a href={`tel:+918093777701`} className="text-white/85 hover:text-white">{CALL_NUMBER}</a>
+              <span className="mx-1.5 text-white/30">|</span>
+              <span className="text-white/85">hello@indianautomobiledoctor.com</span>
+            </p>
+            <p className="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-[12px] font-bold">
+              <Link href="/starter" className="text-white/85 underline hover:text-white">Foundation Pack @ ₹999 →</Link>
+              <Link href="/mastery" className="text-white/85 underline hover:text-white">Mastery Pack @ ₹4,999 →</Link>
+            </p>
             <p className="mt-1">2427 NH5 Hitech Square, Pandra, Bhubaneswar, Odisha 751010</p>
           </div>
           <div className="md:text-right">
             <a
-              href={PAYMENT_URL}
+              href="#book"
               className="inline-block rounded-lg bg-[#f45000] px-5 py-2.5 text-[12.5px] font-extrabold uppercase text-white transition hover:-translate-y-px hover:bg-[#ff5a0a]"
             >
               Book seat @ ₹29 →
             </a>
-            <p className="mt-2 text-[11px]">Live · 28th June · 8 PM · Hindi</p>
+            <p className="mt-2 text-[11px]">Live on Zoom, {time.when} 8 PM IST, in Hindi</p>
           </div>
         </div>
         <div className="mx-auto w-full max-w-6xl">
           <p className="mt-4 border-t border-white/10 pt-3 text-[10.5px]">
-            Note: “₹50,000/month tak” ek aspirational udaharan hai. Job, income ya placement guaranteed nahi — mehnat, skill aur market par depend karta hai.
+            Note: “₹50,000/month tak” ek aspirational udaharan hai. Job, income ya placement guaranteed nahi - mehnat, skill aur market par depend karta hai.
           </p>
         </div>
       </footer>

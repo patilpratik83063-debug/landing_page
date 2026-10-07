@@ -1,7 +1,9 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
+import { VideoShowcase } from "@/components/media";
 import PayButton from "@/components/pay-button";
 import {
   AfterPayment,
@@ -24,16 +26,16 @@ const PRICE = "999";
 const MODULES: CourseModule[] = [
   {
     title: "Advance ECM Repairing",
-    desc: "ECU/ECM kholna, track testing, component-level fault pakadna aur repair — soldering se testing tak, practical ke saath.",
+    desc: "ECU/ECM kholna, track testing, component-level fault pakadna aur repair - soldering se testing tak, practical ke saath.",
   },
   {
     title: "BS6 Diagnostic & Programming",
-    desc: "BS6 sensors, ECM programming, fault codes aur troubleshooting — modern gaadiyon ka core skill.",
+    desc: "BS6 sensors, ECM programming, fault codes aur troubleshooting - modern gaadiyon ka core skill.",
   },
   {
     title: "EV + Hybrid Diagnostic & Programming",
-    tag: "Level 1–2",
-    desc: "EV/Hybrid ki shuruaat: battery safety, basic systems, entry-level diagnostics aur programming — foundation yahin banta hai.",
+    tag: "Level 1-2",
+    desc: "EV/Hybrid ki shuruaat: battery safety, basic systems, entry-level diagnostics aur programming - foundation yahin banta hai.",
   },
   {
     title: "ABS Diagnostic & Programming",
@@ -41,7 +43,7 @@ const MODULES: CourseModule[] = [
   },
   {
     title: "EPS Diagnostic & Programming",
-    desc: "Steering angle calibration, torque sensor checking, motor reset — EPS light ka permanent fix.",
+    desc: "Steering angle calibration, torque sensor checking, motor reset - EPS light ka permanent fix.",
   },
   {
     title: "SRS (Airbag) Diagnostic & Programming",
@@ -49,11 +51,11 @@ const MODULES: CourseModule[] = [
   },
   {
     title: "BCM Diagnostic & Programming",
-    desc: "Body control module coding — key, lighting, power-window jaise functions ka setup aur fault fix.",
+    desc: "Body control module coding - key, lighting, power-window jaise functions ka setup aur fault fix.",
   },
   {
     title: "Cluster Meter Diagnostic & Programming",
-    desc: "Meter calibration, dial/backlight setting aur warning configuration — cluster ka A to Z.",
+    desc: "Meter calibration, dial/backlight setting aur warning configuration - cluster ka A to Z.",
   },
   {
     title: "Engine Repair Training",
@@ -64,7 +66,7 @@ const MODULES: CourseModule[] = [
 const COMPARE = [
   { label: "Advance ECM Repairing", starter: "✓ Included", mastery: "✓ Included" },
   { label: "BS6 Diagnostic + Programming", starter: "✓ Included", mastery: "✓ Included" },
-  { label: "EV / Hybrid levels", starter: "Level 1–2", mastery: "Level 3–10" },
+  { label: "EV / Hybrid levels", starter: "Level 1-2", mastery: "Level 3-10" },
   { label: "ABS · EPS · SRS", starter: "✓ Included", mastery: "✓ Included" },
   { label: "BCM · Cluster Meter", starter: "✓ Included", mastery: "✓ Included" },
   { label: "Engine Repair Training", starter: "✓ Included", mastery: "✓ Included" },
@@ -75,23 +77,23 @@ const COMPARE = [
 const FAQS = [
   {
     q: "Ye ₹999 pack kis ke liye hai?",
-    a: "Beginners, students, mechanics aur garage owners ke liye jo ECM, BS6, EV Level 1–2 aur saare major modules ka strong foundation banana chahte hain.",
+    a: "Beginners, students, mechanics aur garage owners ke liye jo ECM, BS6, EV Level 1-2 aur saare major modules ka strong foundation banana chahte hain.",
   },
   {
     q: "Training videos kaise milengi?",
-    a: "Enroll ke baad saari training videos ka access WhatsApp par milta hai — live practical aur hands-on experience ke saath, premium cars par shoot ki hui.",
+    a: "Enroll ke baad saari training videos ka access WhatsApp par milta hai - live practical aur hands-on experience ke saath, premium cars par shoot ki hui.",
   },
   {
-    q: "Level 1–2 aur Level 3–10 me kya farak hai?",
-    a: "Level 1–2 me EV/Hybrid ke basics, safety aur entry-level diagnostics seekhte ho. Level 3–10 (₹4,999 Mastery Pack) me advanced systems, deep programming aur pro-level diagnostics cover hota hai.",
+    q: "Level 1-2 aur Level 3-10 me kya farak hai?",
+    a: "Level 1-2 me EV/Hybrid ke basics, safety aur entry-level diagnostics seekhte ho. Level 3-10 (₹4,999 Mastery Pack) me advanced systems, deep programming aur pro-level diagnostics cover hota hai.",
   },
   {
     q: "Kya ye Hindi me hai?",
-    a: "Haan, poori training simple Hindi / Hinglish me hai — practical demo ke saath.",
+    a: "Haan, poori training simple Hindi / Hinglish me hai - practical demo ke saath.",
   },
   {
     q: "Enroll kaise karun?",
-    a: "Neeche WhatsApp button dabao ya call karo — “Foundation Pack” likh ke bhejo, payment + access details turant mil jayengi.",
+    a: "Neeche WhatsApp button dabao ya call karo - “Foundation Pack” likh ke bhejo, payment + access details turant mil jayengi.",
   },
 ];
 
@@ -102,7 +104,7 @@ export default function StarterView() {
 
   return (
     <main className="min-h-screen w-full overflow-x-clip bg-white pb-[76px] text-[#131a26]">
-      <TopBar text="Foundation Pack — 9 modules + practical videos" price={PRICE} />
+      <TopBar text="Foundation Pack - 9 modules + practical videos" price={PRICE} />
       <SiteHeader shadow={shadow} />
 
       {/* HERO */}
@@ -113,7 +115,7 @@ export default function StarterView() {
               Foundation Pack · Hindi
             </p>
             <h1 className="h-reveal mt-4 text-[26px] font-extrabold leading-[1.15] tracking-tight sm:text-[34px] lg:text-[42px]">
-              ECM se EV tak —{" "}
+              ECM se EV tak -{" "}
               <span className="relative inline-block text-[#f45000]">
                 diagnostics ka foundation
                 <svg viewBox="0 0 220 10" className="absolute -bottom-1 left-0 w-full" preserveAspectRatio="none">
@@ -123,8 +125,8 @@ export default function StarterView() {
               pakka karo
             </h1>
             <p className="h-reveal mx-auto mt-3 max-w-xl text-[13.5px] leading-relaxed text-[#3d4756] sm:text-[15px] lg:mx-0">
-              Advance ECM repairing, BS6 programming, EV/Hybrid Level 1–2, ABS, EPS, SRS, BCM,
-              cluster meter + engine repair — sab kuch practical videos ke saath, premium cars par.
+              Advance ECM repairing, BS6 programming, EV/Hybrid Level 1-2, ABS, EPS, SRS, BCM,
+              cluster meter + engine repair - sab kuch practical videos ke saath, premium cars par.
             </p>
             <div className="h-reveal mt-4 flex flex-wrap justify-center gap-1.5 lg:justify-start">
               {["9 modules", "Hindi/Hinglish", "Practical videos", "Premium cars"].map((c) => (
@@ -154,7 +156,7 @@ export default function StarterView() {
                 {[
                   "Advance ECM Repairing",
                   "BS6 Diagnostic + Programming",
-                  "EV / Hybrid — Level 1 & 2",
+                  "EV / Hybrid - Level 1 & 2",
                   "ABS · EPS · SRS modules",
                   "BCM · Cluster Meter",
                   "Engine Repair Training",
@@ -194,7 +196,7 @@ export default function StarterView() {
               Is pack me kya-kya seekhoge
             </h2>
             <p className="h-reveal mt-1.5 text-[13px] text-[#5b6572]">
-              Har module practical demo ke saath — dekhna + khud karna, dono.
+              Har module practical demo ke saath - dekhna + khud karna, dono.
             </p>
           </div>
           <ModuleList modules={MODULES} />
@@ -210,7 +212,7 @@ export default function StarterView() {
               Premium cars par live practical
             </h2>
             <p className="h-reveal mt-2 max-w-xl text-[13.5px] leading-relaxed text-white/65">
-              Saari training videos live practical ke saath di jaati hain — premium cars par haath
+              Saari training videos live practical ke saath di jaati hain - premium cars par haath
               laga ke seekhoge: scanner lagana, fault pakadna, programming karna. Theory wala
               ratta system nahi, floor wala kaam.
             </p>
@@ -232,6 +234,18 @@ export default function StarterView() {
             ))}
           </div>
         </div>
+        <div className="mx-auto mt-8 w-full max-w-6xl">
+          <div className="h-reveal relative aspect-[1024/492] overflow-hidden rounded-2xl border border-white/10 shadow-[0_24px_60px_rgba(0,0,0,0.4)]">
+            <Image
+              src="/media/workshop-panels.jpg"
+              alt="Foundation Pack overview: ECM repair, BS6 diagnostics, EV and hybrid systems, professional workshop"
+              fill
+              sizes="(min-width: 1152px) 1100px, 100vw"
+              className="object-cover"
+            />
+          </div>
+          <VideoShowcase />
+        </div>
       </section>
 
       {/* COMPARE */}
@@ -240,10 +254,10 @@ export default function StarterView() {
           <div className="mx-auto max-w-2xl text-center">
             <p className="h-reveal text-[11px] font-bold uppercase tracking-[2px] text-[#f45000]">Confusion clear</p>
             <h2 className="h-reveal mt-1 text-[24px] font-extrabold tracking-tight sm:text-[30px]">
-              ₹999 vs ₹4,999 — farak kya hai?
+              ₹999 vs ₹4,999 - farak kya hai?
             </h2>
             <p className="h-reveal mt-1.5 text-[13px] text-[#5b6572]">
-              Dono me 8 modules same hain. Sirf EV/Hybrid ki depth alag hai.
+              Dono me saare 9 modules same hain. Sirf EV/Hybrid ki depth alag hai.
             </p>
           </div>
           <div className="mt-5">
@@ -253,7 +267,7 @@ export default function StarterView() {
             Shuruaat karni hai, budget tight hai → <span className="font-extrabold">ye ₹999 pack perfect hai.</span>{" "}
             Advanced pro banna hai →{" "}
             <Link href="/mastery" className="font-extrabold text-[#f45000] underline">
-              Mastery Pack (L3–10) dekho →
+              Mastery Pack (L3-10) dekho →
             </Link>
           </p>
         </div>
@@ -271,9 +285,9 @@ export default function StarterView() {
           <div className="mt-5 grid gap-2.5 sm:grid-cols-2 lg:grid-cols-4">
             {[
               ["🔧 Mechanics", "Scanner se dar lagta hai? Foundation se confidence lao."],
-              ["🎓 ITI / Diploma students", "Theory ke saath practical skill — job-ready bano."],
+              ["🎓 ITI / Diploma students", "Theory ke saath practical skill - job-ready bano."],
               ["🏠 Garage owners", "BS6 + EV gaadiyan wapas nahi bhejni padengi."],
-              ["🚀 Beginners", "Zero se start — Hindi me, step-by-step."],
+              ["🚀 Beginners", "Zero se start - Hindi me, step-by-step."],
             ].map(([t, d], i) => (
               <div
                 key={t as string}
@@ -293,7 +307,7 @@ export default function StarterView() {
         <div className="mx-auto w-full max-w-2xl text-center">
           <p className="h-reveal text-[11px] font-bold uppercase tracking-[2px] text-[#f45000]">Enroll karo</p>
           <h2 className="h-reveal mt-1 text-[24px] font-extrabold tracking-tight sm:text-[30px]">
-            Foundation Pack — sirf ₹999
+            Foundation Pack - sirf ₹999
           </h2>
           <p className="h-reveal mt-1.5 text-[13px] text-[#5b6572]">
             One-time payment · Saari training videos included · WhatsApp support

@@ -1,5 +1,6 @@
 "use client";
 
+import { CheckCircle2, Loader2, MessageCircle } from "lucide-react";
 import { useState } from "react";
 import { waLink } from "./course-blocks";
 
@@ -170,18 +171,20 @@ export default function PayButton({
     const confirmHref = `${waLink(PACK_LABEL[pack], price)}${encodeURIComponent(` Payment ID: ${paymentId}`)}`;
     return (
       <div className="rounded-xl border-2 border-[#15803d] bg-[#f0fdf4] p-4 text-center">
-        <p className="text-[15px] font-extrabold text-[#15803d]">✓ Payment successful!</p>
+        <p className="flex items-center justify-center gap-1.5 text-[15px] font-extrabold text-[#15803d]">
+          <CheckCircle2 className="h-5 w-5" strokeWidth={2.25} /> Payment successful!
+        </p>
         <p className="mt-1 break-all font-mono text-[11px] text-[#3d4756]">ID: {paymentId}</p>
         <p className="mt-1 text-[12px] text-[#3d4756]">
-          Screenshot le lo — neeche button se WhatsApp par bhejo, access link turant milega.
+          Screenshot le lo - neeche button se WhatsApp par bhejo, access link turant milega.
         </p>
         <a
           href={confirmHref}
           target="_blank"
           rel="noopener noreferrer"
-          className="btn-wa mt-3 block rounded-xl px-4 py-3 text-center text-[13px] font-extrabold uppercase text-white"
+          className="btn-wa mt-3 flex items-center justify-center gap-2 rounded-xl px-4 py-3 text-center text-[13px] font-extrabold uppercase text-white"
         >
-          ✆ Send payment ID on WhatsApp →
+          <MessageCircle className="h-4 w-4" strokeWidth={2.25} /> Send payment ID on WhatsApp
         </a>
       </div>
     );
@@ -190,10 +193,16 @@ export default function PayButton({
   return (
     <div className="w-full">
       <button type="button" onClick={() => void pay()} disabled={loading} className={className}>
-        {loading ? "Processing… please wait" : children}
+        {loading ? (
+          <span className="inline-flex items-center justify-center gap-2">
+            <Loader2 className="h-4 w-4 animate-spin" strokeWidth={2.5} /> Processing, please wait
+          </span>
+        ) : (
+          children
+        )}
       </button>
       {error && (
-        <p className="mt-2 rounded-lg bg-red-50 px-3 py-2 text-center text-[12px] font-semibold text-red-700">
+        <p role="alert" className="mt-2 rounded-lg bg-red-50 px-3 py-2 text-center text-[12px] font-semibold text-red-700">
           {error}
         </p>
       )}

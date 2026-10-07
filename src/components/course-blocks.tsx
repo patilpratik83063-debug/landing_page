@@ -1,5 +1,6 @@
 "use client";
 
+import { MessageCircle, Phone } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import PayButton, { PayPack } from "./pay-button";
@@ -53,13 +54,20 @@ export function useReveal() {
   }, []);
 }
 
+/** True once the page is scrolled past `threshold` px. Uses an observed sentinel, not a scroll listener. */
 export function useScrolled(threshold = 8) {
   const [s, setS] = useState(false);
   useEffect(() => {
-    const onScroll = () => setS(window.scrollY > threshold);
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+    const sentinel = document.createElement("div");
+    sentinel.setAttribute("aria-hidden", "true");
+    sentinel.style.cssText = `position:absolute;top:0;left:0;width:1px;height:${threshold}px;pointer-events:none;`;
+    document.body.prepend(sentinel);
+    const io = new IntersectionObserver(([e]) => setS(!e.isIntersecting));
+    io.observe(sentinel);
+    return () => {
+      io.disconnect();
+      sentinel.remove();
+    };
   }, [threshold]);
   return s;
 }
@@ -103,9 +111,9 @@ export function SiteHeader({ shadow }: { shadow: boolean }) {
           </Link>
           <a
             href={`tel:${WA_NUMBER}`}
-            className="rounded-lg bg-[#131a26] px-3.5 py-2 text-[12px] font-bold text-white transition hover:bg-black"
+            className="inline-flex items-center gap-1.5 rounded-lg bg-[#131a26] px-3.5 py-2 text-[12px] font-bold text-white transition hover:bg-black"
           >
-            📞 Call
+            <Phone className="h-3.5 w-3.5" strokeWidth={2.25} /> Call
           </a>
         </div>
       </div>
@@ -221,19 +229,19 @@ export function DualCta({ pack, price, payPack }: { pack: string; price: string;
         rel="noopener noreferrer"
         className="btn-wa block rounded-xl px-4 py-3 text-center text-[13px] font-extrabold uppercase tracking-wide text-white"
       >
-        ✆ WhatsApp
+        <MessageCircle className="mr-1.5 inline h-4 w-4 -translate-y-px" strokeWidth={2.25} /> WhatsApp
       </a>
       <a
         href={`tel:${WA_NUMBER}`}
         className="block rounded-xl border-2 border-[#131a26] bg-white px-4 py-3 text-center text-[13px] font-extrabold uppercase tracking-wide text-[#131a26] transition hover:bg-[#131a26] hover:text-white"
       >
-        📞 {CALL_NUMBER}
+        <Phone className="mr-1.5 inline h-4 w-4 -translate-y-px" strokeWidth={2.25} /> {CALL_NUMBER}
       </a>
       <p className="text-center text-[11.5px] text-[#5b6572] sm:col-span-2">
-        WhatsApp par pack ka naam likh ke bhejo — videos + joining details turant milengi
+        WhatsApp par pack ka naam likh ke bhejo - videos + joining details turant milengi
       </p>
       <div className="flex flex-wrap justify-center gap-1.5 sm:col-span-2">
-        {["✓ Hindi me training", "✓ Practical videos", "✓ WhatsApp support", "✓ One-time payment"].map((t) => (
+        {["Hindi me training", "Practical videos", "WhatsApp support", "One-time payment"].map((t) => (
           <span key={t} className="rounded-full bg-[#15803d]/10 px-2.5 py-1 text-[10.5px] font-bold text-[#15803d]">
             {t}
           </span>
@@ -279,7 +287,7 @@ export function CourseFaq({
                 isOpen ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"
               }`}
             >
-              <div className="overflow-hidden">
+              <div className="overflow-hidden" inert={!isOpen}>
                 <p className="px-4 pb-4 text-[12.5px] leading-relaxed text-[#3d4756]">{f.a}</p>
               </div>
             </div>
@@ -292,8 +300,8 @@ export function CourseFaq({
 
 export function AfterPayment({ pack }: { pack: string }) {
   const steps = [
-    ["1", "WhatsApp par confirm karo", `Neeche button dabao — "${pack}" likha message ready milega, bas send karo.`],
-    ["2", "Payment complete karo", "Pay button dabao — UPI, card, netbanking se secure payment karo. Paise seedha IAD account me jate hain."],
+    ["1", "WhatsApp par confirm karo", `Neeche button dabao - "${pack}" likha message ready milega, bas send karo.`],
+    ["2", "Payment complete karo", "Pay button dabao - UPI, card, netbanking se secure payment karo. Paise seedha IAD account me jate hain."],
     ["3", "Access link turant pao", "Payment ke turant baad training videos ka access link + joining details WhatsApp par mil jayengi."],
   ] as const;
   return (
@@ -313,13 +321,14 @@ export function AfterPayment({ pack }: { pack: string }) {
         ))}
       </div>
       <p className="mt-3 text-center text-[11.5px] font-semibold text-[#5b6572]">
-        Koi dikkat aaye to isi number par call/WhatsApp karo — team turant help karegi
+        Koi dikkat aaye to isi number par call/WhatsApp karo - team turant help karegi
       </p>
     </div>
   );
 }
 
-export function StickyCourseBar({ pack, price, payPack }: { pack: string; price: string; payPack: PayPack }) {  return (
+export function StickyCourseBar({ pack, price, payPack }: { pack: string; price: string; payPack: PayPack }) {
+  return (
     <div
       className="fixed inset-x-0 bottom-0 z-50 border-t border-[#eadfd2] bg-white/97 px-3 backdrop-blur"
       style={{ paddingTop: "10px", paddingBottom: "calc(10px + env(safe-area-inset-bottom))" }}
@@ -339,7 +348,7 @@ export function StickyCourseBar({ pack, price, payPack }: { pack: string; price:
             aria-label="Call to enroll"
             className="grid h-11 w-11 place-items-center rounded-xl border-2 border-[#131a26] text-lg transition hover:bg-[#131a26] hover:text-white"
           >
-            📞
+            <Phone className="h-[18px] w-[18px]" strokeWidth={2.25} />
           </a>
           <PayButton
             pack={payPack}
