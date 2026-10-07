@@ -765,6 +765,10 @@ export default function Home() {
             <p className="text-[13px] font-bold text-white">Indian Automobile Doctor (IAD)</p>
             <p className="mt-2 max-w-md">20+ saal se auto market me. EV, BS6, Hybrid, diagnostics aur ECU programming ki practical training.</p>
             <p className="mt-2">Call: <span className="text-white/85">9827847466</span> · Email: <span className="text-white/85">hello@indianautomobiledoctor.com</span></p>
+          <p className="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-[12px] font-bold">
+            <a href="/starter" className="text-white/85 underline hover:text-white">Foundation Pack @ ₹999 →</a>
+            <a href="/mastery" className="text-white/85 underline hover:text-white">Mastery Pack @ ₹4,999 →</a>
+          </p>
             <p className="mt-1">2427 NH5 Hitech Square, Pandra, Bhubaneswar, Odisha 751010</p>
           </div>
           <div className="md:text-right">

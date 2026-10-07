@@ -408,8 +408,7 @@ body {
   transform: translateY(-1px);
   box-shadow: 0 7px 0 var(--brand-dark), 0 18px 30px rgba(244, 80, 0, 0.32);
 }
-.btn-brand:active {
-  transform: translateY(4px);
+.btn-brand:active {  transform: translateY(4px);
   box-shadow: 0 2px 0 var(--brand-dark), 0 8px 16px rgba(244, 80, 0, 0.25);
 }
 .card-lift { transition: transform 0.25s ease, box-shadow 0.25s ease; }
@@ -435,3 +434,18 @@ body {
 .h-tick { animation: h-tick 0.35s ease; }
 .h-marquee { animation: h-ticker 30s linear infinite; }
 .h-marquee:hover { animation-play-state: paused; }
+.btn-wa {
+  background: #1faa53;
+  color: #fff;
+  box-shadow: 0 6px 0 #137a3a, 0 14px 26px rgba(31, 170, 83, 0.28);
+  transition: transform 0.12s ease, box-shadow 0.12s ease, background 0.2s ease;
+}
+.btn-wa:hover {
+  background: #22b95c;
+  transform: translateY(-1px);
+  box-shadow: 0 7px 0 #137a3a, 0 18px 30px rgba(31, 170, 83, 0.32);
+}
+.btn-wa:active {
+  transform: translateY(4px);
+  box-shadow: 0 2px 0 #137a3a, 0 8px 16px rgba(31, 170, 83, 0.25);
+}
