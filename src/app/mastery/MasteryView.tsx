@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import PayButton from "@/components/pay-button";
 import {
   AfterPayment,
   CompareTable,
@@ -15,7 +16,6 @@ import {
   TopBar,
   useReveal,
   useScrolled,
-  waLink,
 } from "@/components/course-blocks";
 
 const PACK = "Mastery Pack";
@@ -134,7 +134,7 @@ export default function MasteryView() {
               ))}
             </div>
             <div className="h-reveal mx-auto mt-5 max-w-md lg:mx-0">
-              <DualCta pack={PACK} price={PRICE} />
+              <DualCta pack={PACK} price={PRICE} payPack="mastery" />
             </div>
           </div>
 
@@ -165,17 +165,16 @@ export default function MasteryView() {
               </ul>
               <div className="ticket-edge mx-5" />
               <div className="px-5 py-4">
-                <a
-                  href={waLink(PACK, PRICE)}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="btn-wa group block rounded-xl px-4 py-3.5 text-center text-[14px] font-extrabold uppercase text-white"
+                <PayButton
+                  pack="mastery"
+                  price={PRICE}
+                  className="btn-brand group block w-full rounded-xl px-4 py-3.5 text-center text-[14px] font-extrabold uppercase text-white disabled:cursor-wait disabled:opacity-70"
                 >
-                  ✆ Enroll now @ ₹4,999
+                  Pay ₹4,999 & enroll now
                   <span className="ml-1 inline-block transition-transform duration-200 group-hover:translate-x-1">→</span>
-                </a>
+                </PayButton>
                 <p className="mt-2 text-center text-[11px] text-[#5b6572]">
-                  WhatsApp par confirm karo — access turant milega
+                  Secure UPI / card payment · Access link turant milega
                 </p>
               </div>
             </div>
@@ -297,7 +296,7 @@ export default function MasteryView() {
             One-time payment · L3–L10 + saari practical videos included · WhatsApp support
           </p>
           <div className="h-reveal mx-auto mt-5 max-w-md">
-            <DualCta pack={PACK} price={PRICE} />
+            <DualCta pack={PACK} price={PRICE} payPack="mastery" />
           </div>
           <AfterPayment pack={PACK} />
         </div>
@@ -312,7 +311,7 @@ export default function MasteryView() {
       </section>
 
       <CourseFooter pack={PACK} price={PRICE} />
-      <StickyCourseBar pack={PACK} price={PRICE} />
+      <StickyCourseBar pack={PACK} price={PRICE} payPack="mastery" />
     </main>
   );
 }

@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import PayButton, { PayPack } from "./pay-button";
 
 export const WA_NUMBER = "918093777701";
 export const CALL_NUMBER = "+91 80937 77701";
@@ -201,21 +202,30 @@ export function CompareTable({
   );
 }
 
-export function DualCta({ pack, price }: { pack: string; price: string }) {
+export function DualCta({ pack, price, payPack }: { pack: string; price: string; payPack: PayPack }) {
   return (
     <div className="grid gap-2.5 sm:grid-cols-2">
+      <div className="sm:col-span-2">
+        <PayButton
+          pack={payPack}
+          price={price}
+          className="btn-brand group block w-full rounded-xl px-4 py-3.5 text-center text-[14px] font-extrabold uppercase tracking-wide text-white disabled:cursor-wait disabled:opacity-70"
+        >
+          Pay ₹{price} & enroll now
+          <span className="ml-1 inline-block transition-transform duration-200 group-hover:translate-x-1">→</span>
+        </PayButton>
+      </div>
       <a
         href={waLink(pack, price)}
         target="_blank"
         rel="noopener noreferrer"
-        className="btn-wa group block rounded-xl px-4 py-3.5 text-center text-[14px] font-extrabold uppercase tracking-wide text-white"
+        className="btn-wa block rounded-xl px-4 py-3 text-center text-[13px] font-extrabold uppercase tracking-wide text-white"
       >
-        ✆ WhatsApp par enroll karo
-        <span className="ml-1 inline-block transition-transform duration-200 group-hover:translate-x-1">→</span>
+        ✆ WhatsApp
       </a>
       <a
         href={`tel:${WA_NUMBER}`}
-        className="block rounded-xl border-2 border-[#131a26] bg-white px-4 py-3.5 text-center text-[14px] font-extrabold uppercase tracking-wide text-[#131a26] transition hover:bg-[#131a26] hover:text-white"
+        className="block rounded-xl border-2 border-[#131a26] bg-white px-4 py-3 text-center text-[13px] font-extrabold uppercase tracking-wide text-[#131a26] transition hover:bg-[#131a26] hover:text-white"
       >
         📞 {CALL_NUMBER}
       </a>
@@ -309,7 +319,7 @@ export function AfterPayment({ pack }: { pack: string }) {
   );
 }
 
-export function StickyCourseBar({ pack, price }: { pack: string; price: string }) {  return (
+export function StickyCourseBar({ pack, price, payPack }: { pack: string; price: string; payPack: PayPack }) {  return (
     <div
       className="fixed inset-x-0 bottom-0 z-50 border-t border-[#eadfd2] bg-white/97 px-3 backdrop-blur"
       style={{ paddingTop: "10px", paddingBottom: "calc(10px + env(safe-area-inset-bottom))" }}
@@ -323,7 +333,7 @@ export function StickyCourseBar({ pack, price }: { pack: string; price: string }
             {pack} · Videos included
           </p>
         </div>
-        <div className="flex gap-2">
+        <div className="flex shrink-0 gap-2">
           <a
             href={`tel:${WA_NUMBER}`}
             aria-label="Call to enroll"
@@ -331,14 +341,13 @@ export function StickyCourseBar({ pack, price }: { pack: string; price: string }
           >
             📞
           </a>
-          <a
-            href={waLink(pack, price)}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="btn-wa rounded-xl px-5 py-3 text-[13px] font-extrabold uppercase sm:px-7"
+          <PayButton
+            pack={payPack}
+            price={price}
+            className="btn-wa rounded-xl px-5 py-3 text-[13px] font-extrabold uppercase disabled:opacity-70"
           >
             Enroll →
-          </a>
+          </PayButton>
         </div>
       </div>
     </div>

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import PayButton from "@/components/pay-button";
 
 const PAYMENT_URL = "https://workshop.indianautomobiledoctor.com/payment";
 const IMG_BASE =
@@ -168,16 +169,18 @@ const BRANDS = ["Tata Motors", "Mahindra", "Maruti Suzuki", "Hyundai", "Kia", "M
 
 function BookButton({ small }: { small?: boolean }) {
   return (
-    <a
-      href={PAYMENT_URL}
-      className={`btn-brand group block w-full rounded-xl text-center font-bold uppercase tracking-wide text-white ${
+    <PayButton
+      pack="masterclass"
+      price="29"
+      fallbackHref={PAYMENT_URL}
+      className={`btn-brand group block w-full rounded-xl text-center font-bold uppercase tracking-wide text-white disabled:cursor-wait disabled:opacity-70 ${
         small ? "px-4 py-3 text-[13px]" : "px-6 py-4 text-[15px] sm:text-base"
       }`}
     >
       <span className="mr-2 font-medium normal-case text-white/70 line-through">₹999</span>
       Yes! Book my seat @ ₹29
       <span className="ml-1 inline-block transition-transform duration-200 group-hover:translate-x-1">→</span>
-    </a>
+    </PayButton>
   );
 }
 
@@ -798,9 +801,16 @@ export default function Home() {
             <p className="text-[13px] font-extrabold">₹29 <span className="text-[11px] font-medium text-[#5b6572] line-through">₹999</span></p>
             <p className="font-mono text-[11px] font-bold tabular-nums text-[#f45000]">{time.h}h : {time.m}m : {time.s}s left</p>
           </div>
-          <a href={PAYMENT_URL} className="btn-brand rounded-xl px-6 py-3 text-[13.5px] font-extrabold uppercase sm:px-8">
-            Book seat →
-          </a>
+          <div className="shrink-0">
+            <PayButton
+              pack="masterclass"
+              price="29"
+              fallbackHref={PAYMENT_URL}
+              className="btn-brand rounded-xl px-6 py-3 text-[13.5px] font-extrabold uppercase disabled:opacity-70 sm:px-8"
+            >
+              Book seat →
+            </PayButton>
+          </div>
         </div>
       </div>
     </main>
