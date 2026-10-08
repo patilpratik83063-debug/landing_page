@@ -259,14 +259,14 @@ export default function Home() {
               ● Live on Zoom · Hindi / Hinglish
             </p>
             <h1 className="h-reveal mt-4 text-[26px] font-extrabold leading-[1.15] tracking-tight sm:text-[34px] lg:text-[44px]">
-              Become a{" "}
+              Become A{" "}
               <span className="relative inline-block text-[#f45000]">
-                Certified EV Technician
+                Master In EV Technology
                 <svg viewBox="0 0 220 10" className="absolute -bottom-1 left-0 w-full" preserveAspectRatio="none">
                   <path d="M3 7 Q 60 1 110 5 T 217 4" fill="none" stroke="#f45000" strokeWidth="3.5" strokeLinecap="round" opacity="0.45" />
                 </svg>
               </span>{" "}
-              in 60 days - earn up to ₹50,000/month
+              - Earn 5 Lakhs To 12 Lakhs Per Year
             </h1>
             <p className="h-reveal mx-auto mt-3 max-w-xl text-[13.5px] leading-relaxed text-[#3d4756] sm:text-[15px] lg:mx-0">
               EV battery, BMS, motor controller, BS6 diagnostics, hybrid tech &amp; scanner-based
