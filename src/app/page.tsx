@@ -9,8 +9,6 @@ import { RecognitionWall, VideoShowcase } from "@/components/media";
 import PayButton from "@/components/pay-button";
 
 const PAYMENT_URL = "https://workshop.indianautomobiledoctor.com/payment";
-const IMG_BASE =
-  "https://workshop.indianautomobiledoctor.com/wp-content/uploads/2026/05";
 const YT_ID = "tXWN5T-bd1k";
 
 /* Evergreen deadline: next 8 PM IST (masterclass runs daily).
@@ -115,21 +113,21 @@ const PROOFS = [
 ];
 
 const TESTIMONIALS = [
-  { img: `${IMG_BASE}/WhatsApp-Image-2026-05-13-at-10.36.18-AM.jpeg`, title: "Student Success Story", tag: "Fresher → Technician" },
-  { img: `${IMG_BASE}/WhatsApp-Image-2026-05-13-at-10.36.16-AM.jpeg`, title: "Mechanic Upgrade Story", tag: "IC engine → EV" },
-  { img: `${IMG_BASE}/WhatsApp-Image-2026-05-13-at-10.36.20-AM.jpeg`, title: "Garage Owner Story", tag: "Business growth" },
-  { img: `${IMG_BASE}/WhatsApp-Image-2026-05-13-at-10.36.20-AM-1.jpeg`, title: "EV Training Experience", tag: "Hands-on learning" },
-  { img: `${IMG_BASE}/WhatsApp-Image-2026-05-13-at-10.36.28-AM.jpeg`, title: "Internship / Job Story", tag: "Career breakthrough" },
-  { img: `${IMG_BASE}/WhatsApp-Image-2026-05-13-at-10.36.22-AM-1.jpeg`, title: "Certificate Moment", tag: "Certified, proud" },
+  { img: "/images/review-skoda-placement.jpg", title: "Rohan Sahu", tag: "Placed at Skoda, Pune" },
+  { img: "/images/review-student-growth.jpg", title: "Rohit", tag: "Basics se diagnosis tak" },
+  { img: "/images/review-workshop-owner.jpg", title: "Ritesh", tag: "Workshop owner" },
+  { img: "/images/review-service-technician.jpg", title: "Vikash", tag: "Service technician, Cuttack" },
+  { img: "/images/review-ecu-coding.jpg", title: "Imran", tag: "ECU coding practice" },
+  { img: "/images/review-self-employed.jpg", title: "Aditya", tag: "Mobile scanning service" },
 ];
 
 const GALLERY = [
-  { img: `${IMG_BASE}/WhatsApp-Image-2026-05-13-at-10.36.21-AM.jpeg`, t: "Workshop training", s: "Practical session" },
-  { img: `${IMG_BASE}/WhatsApp-Image-2026-05-13-at-10.36.24-AM.jpeg`, t: "EV battery & BMS", s: "Live demo" },
-  { img: `${IMG_BASE}/WhatsApp-Image-2026-05-13-at-10.36.26-AM.jpeg`, t: "Scanner diagnostics", s: "Hands-on" },
-  { img: `${IMG_BASE}/WhatsApp-Image-2026-05-13-at-10.36.25-AM-2.jpeg`, t: "Certificate moment", s: "Student achievement" },
-  { img: `${IMG_BASE}/WhatsApp-Image-2026-05-13-at-10.36.22-AM.jpeg`, t: "Garage setup", s: "Real workshop" },
-  { img: `${IMG_BASE}/WhatsApp-Image-2026-05-13-at-10.36.22-AM-1.jpeg`, t: "Training batch", s: "Live session" },
+  { img: "/images/classroom-lecture.jpg", t: "Workshop training", s: "Practical session" },
+  { img: "/images/practical-demo-class.jpg", t: "Live diagnostics", s: "Hands-on demo" },
+  { img: "/images/workshop-floor-batch.jpg", t: "Training batch", s: "Real workshop" },
+  { img: "/images/certificate-handover.jpg", t: "Certificate moment", s: "Student achievement" },
+  { img: "/images/ev-scooter-workshop.jpg", t: "EV workshop", s: "Two-wheeler practice" },
+  { img: "/images/odisha-skills-certificates.jpg", t: "Odisha Skills", s: "Certificates & medals" },
 ];
 
 const FAQS = [
@@ -266,7 +264,7 @@ export default function Home() {
                   <path d="M3 7 Q 60 1 110 5 T 217 4" fill="none" stroke="#f45000" strokeWidth="3.5" strokeLinecap="round" opacity="0.45" />
                 </svg>
               </span>{" "}
-              - Earn 5 Lakhs To 12 Lakhs Per Year
+              - 60 Din Me Job-Ready Skill Banao
             </h1>
             <p className="h-reveal mx-auto mt-3 max-w-xl text-[13.5px] leading-relaxed text-[#3d4756] sm:text-[15px] lg:mx-0">
               EV battery, BMS, motor controller, BS6 diagnostics, hybrid tech &amp; scanner-based
@@ -372,6 +370,24 @@ export default function Home() {
                 </div>
               ))}
             </dl>
+          </div>
+        </div>
+      </section>
+
+      {/* VIDEOS - moved up so the proof is visible early */}
+      <section className="bg-[#0e1626] px-4 py-12 text-white sm:px-6 lg:py-16">
+        <div className="mx-auto w-full max-w-6xl">
+          <div className="max-w-2xl">
+            <h2 className="h-reveal text-[26px] font-extrabold tracking-tight text-white sm:text-[34px]">
+              Dekho, phir join karo
+            </h2>
+            <p className="h-reveal mt-2 max-w-xl text-[14px] leading-relaxed text-white/65">
+              Course preview aur live practical videos. Dekh lo training kaisi hoti hai, phir seat book karo.
+            </p>
+          </div>
+          <VideoShowcase />
+          <div className="h-reveal mt-7 max-w-md">
+            <BookButton small />
           </div>
         </div>
       </section>
@@ -491,24 +507,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* VIDEOS */}
-      <section className="bg-[#0e1626] px-4 py-12 text-white sm:px-6 lg:py-16">
-        <div className="mx-auto w-full max-w-6xl">
-          <div className="max-w-2xl">
-            <h2 className="h-reveal text-[26px] font-extrabold tracking-tight text-white sm:text-[34px]">
-              Dekho, phir join karo
-            </h2>
-            <p className="h-reveal mt-2 max-w-xl text-[14px] leading-relaxed text-white/65">
-              Course preview aur live practical videos. Dekh lo training kaisi hoti hai, phir seat book karo.
-            </p>
-          </div>
-          <VideoShowcase />
-          <div className="h-reveal mt-7 max-w-md">
-            <BookButton small />
-          </div>
-        </div>
-      </section>
-
       {/* TESTIMONIALS */}
       <section className="bg-[#fff6ec] px-4 py-10 sm:px-6 lg:py-14">
         <div className="mx-auto w-full max-w-6xl">
@@ -540,11 +538,17 @@ export default function Home() {
                 <figcaption className="p-3">
                   <p className="text-[12.5px] font-bold leading-snug">{t.title}</p>
                   <p className="mt-0.5 text-[10.5px] font-medium text-[#5b6572]">{t.tag}</p>
-                  <p className="mt-1 text-[10px] tracking-wide text-[#d97706]">★★★★★</p>
+                  <p className="mt-1 text-[10px] font-bold tracking-wide uppercase text-[#15803d]">
+                    Real WhatsApp message
+                  </p>
                 </figcaption>
               </figure>
             ))}
           </div>
+          <p className="h-reveal mt-3 max-w-xl text-[10.5px] leading-relaxed text-[#5b6572]">
+            Screenshots students ne khud share kiye hain. Har student ka result alag hota hai - skill,
+            practice aur market par depend karta hai.
+          </p>
           <div className="h-reveal mt-6 max-w-md">
             <BookButton small />
           </div>
@@ -669,7 +673,7 @@ export default function Home() {
           <div className="h-reveal card-lift mx-auto mt-5 max-w-3xl overflow-hidden rounded-2xl border border-[#eadfd2] sm:grid sm:grid-cols-[240px_1fr]">
             <div className="relative aspect-[4/3] overflow-hidden bg-[#e9e2d4] sm:aspect-auto sm:min-h-[280px]">
               <Image
-                src={`${IMG_BASE}/WhatsApp-Image-2026-05-13-at-11.03.18-AM.jpeg`}
+                src="/images/trainer-portrait.jpg"
                 alt="Mr. SK Salman Khurshid, Founder of Indian Automobile Doctor"
                 fill
                 sizes="(min-width: 640px) 240px, 100vw"
@@ -816,6 +820,11 @@ export default function Home() {
               <Link href="/starter" className="text-white/85 underline hover:text-white">Foundation Pack @ ₹999 →</Link>
               <Link href="/mastery" className="text-white/85 underline hover:text-white">Mastery Pack @ ₹4,999 →</Link>
             </p>
+            <p className="mt-1.5 flex flex-wrap gap-x-3 gap-y-1 text-[11px]">
+              <Link href="/privacy" className="underline hover:text-white">Privacy Policy</Link>
+              <Link href="/terms" className="underline hover:text-white">Terms</Link>
+              <Link href="/refund" className="underline hover:text-white">Refund Policy</Link>
+            </p>
             <p className="mt-1">2427 NH5 Hitech Square, Pandra, Bhubaneswar, Odisha 751010</p>
           </div>
           <div className="md:text-right">
@@ -830,7 +839,12 @@ export default function Home() {
         </div>
         <div className="mx-auto w-full max-w-6xl">
           <p className="mt-4 border-t border-white/10 pt-3 text-[10.5px]">
-            Note: “₹50,000/month tak” ek aspirational udaharan hai. Job, income ya placement guaranteed nahi - mehnat, skill aur market par depend karta hai.
+            Note: Ye ek educational training hai. Job, placement ya income guaranteed nahi hai -
+            result aapki practice, skill aur market par depend karta hai.
+          </p>
+          <p className="mt-1 text-[10.5px]">
+            © {new Date().getFullYear()} Indian Automobile Doctor · 2427 NH5 Hitech Square, Pandra,
+            Bhubaneswar, Odisha 751010
           </p>
         </div>
       </footer>

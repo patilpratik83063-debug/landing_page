@@ -210,38 +210,31 @@ export function CompareTable({
   );
 }
 
+/** One primary action only. WhatsApp stays available, but visibly secondary. */
 export function DualCta({ pack, price, payPack }: { pack: string; price: string; payPack: PayPack }) {
   return (
-    <div className="grid gap-2.5 sm:grid-cols-2">
-      <div className="sm:col-span-2">
-        <PayButton
-          pack={payPack}
-          price={price}
-          className="btn-brand group block w-full rounded-xl px-4 py-3.5 text-center text-[14px] font-extrabold uppercase tracking-wide text-white disabled:cursor-wait disabled:opacity-70"
+    <div>
+      <PayButton
+        pack={payPack}
+        price={price}
+        className="btn-brand group block w-full rounded-xl px-4 py-3.5 text-center text-[14px] font-extrabold uppercase tracking-wide text-white disabled:cursor-wait disabled:opacity-70"
+      >
+        Pay ₹{price} &amp; get instant access
+        <span className="ml-1 inline-block transition-transform duration-200 group-hover:translate-x-1">→</span>
+      </PayButton>
+      <p className="mt-2 flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-[11.5px] text-[#5b6572]">
+        <span className="font-semibold text-[#131a26]">Secure UPI / card · Access turant</span>
+        <a
+          href={waLink(pack, price)}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center gap-1 font-bold text-[#15803d] underline decoration-[#15803d]/30 underline-offset-2 hover:decoration-[#15803d]"
         >
-          Pay ₹{price} & enroll now
-          <span className="ml-1 inline-block transition-transform duration-200 group-hover:translate-x-1">→</span>
-        </PayButton>
-      </div>
-      <a
-        href={waLink(pack, price)}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="btn-wa block rounded-xl px-4 py-3 text-center text-[13px] font-extrabold uppercase tracking-wide text-white"
-      >
-        <MessageCircle className="mr-1.5 inline h-4 w-4 -translate-y-px" strokeWidth={2.25} /> WhatsApp
-      </a>
-      <a
-        href={`tel:${WA_NUMBER}`}
-        className="block rounded-xl border-2 border-[#131a26] bg-white px-4 py-3 text-center text-[13px] font-extrabold uppercase tracking-wide text-[#131a26] transition hover:bg-[#131a26] hover:text-white"
-      >
-        <Phone className="mr-1.5 inline h-4 w-4 -translate-y-px" strokeWidth={2.25} /> {CALL_NUMBER}
-      </a>
-      <p className="text-center text-[11.5px] text-[#5b6572] sm:col-span-2">
-        WhatsApp par pack ka naam likh ke bhejo - videos + joining details turant milengi
+          <MessageCircle className="h-3.5 w-3.5" strokeWidth={2.25} /> Doubt hai? Puchho
+        </a>
       </p>
-      <div className="flex flex-wrap justify-center gap-1.5 sm:col-span-2">
-        {["Hindi me training", "Practical videos", "WhatsApp support", "One-time payment"].map((t) => (
+      <div className="mt-3 flex flex-wrap justify-center gap-1.5">
+        {["Hindi me training", "9 practical modules", "WhatsApp support", "One-time payment"].map((t) => (
           <span key={t} className="rounded-full bg-[#15803d]/10 px-2.5 py-1 text-[10.5px] font-bold text-[#15803d]">
             {t}
           </span>
@@ -300,9 +293,9 @@ export function CourseFaq({
 
 export function AfterPayment({ pack }: { pack: string }) {
   const steps = [
-    ["1", "WhatsApp par confirm karo", `Neeche button dabao - "${pack}" likha message ready milega, bas send karo.`],
-    ["2", "Payment complete karo", "Pay button dabao - UPI, card, netbanking se secure payment karo. Paise seedha IAD account me jate hain."],
-    ["3", "Access link turant pao", "Payment ke turant baad training videos ka access link + joining details WhatsApp par mil jayengi."],
+    ["1", "Pay securely", "UPI, card ya netbanking se one-time payment. Payment Razorpay ke secure checkout se hota hai."],
+    ["2", "Access turant pao", `Payment ke turant baad ${pack} ki training videos ka access link WhatsApp aur email par milta hai.`],
+    ["3", "Shuru karo", "Video dekhna shuru karo. Koi bhi doubt ho to usi WhatsApp number par puchho - team help karti hai."],
   ] as const;
   return (
     <div className="h-reveal mt-6 rounded-2xl border-2 border-dashed border-[#f45000]/40 bg-[#fff6ec] p-5 sm:p-6">
@@ -386,7 +379,7 @@ export function CourseFooter({ pack, price }: { pack: string; price: string }) {
           >
             Enroll @ ₹{price} →
           </a>
-          <p className="mt-2 flex justify-start gap-2 text-[11px] md:justify-end">
+          <p className="mt-2 flex flex-wrap justify-start gap-2 text-[11px] md:justify-end">
             <Link href="/" className="underline hover:text-white">Home</Link>
             <Link href="/starter" className="underline hover:text-white">₹999 Pack</Link>
             <Link href="/mastery" className="underline hover:text-white">₹4999 Pack</Link>
@@ -394,11 +387,21 @@ export function CourseFooter({ pack, price }: { pack: string; price: string }) {
               WhatsApp
             </a>
           </p>
+          <p className="mt-2 flex flex-wrap justify-start gap-2 text-[11px] md:justify-end">
+            <Link href="/privacy" className="underline hover:text-white">Privacy Policy</Link>
+            <Link href="/terms" className="underline hover:text-white">Terms</Link>
+            <Link href="/refund" className="underline hover:text-white">Refund Policy</Link>
+          </p>
         </div>
       </div>
       <div className="mx-auto w-full max-w-6xl">
         <p className="mt-4 border-t border-white/10 pt-3 text-[10.5px]">
-          Note: Training outcomes aapki practice, skill aur consistency par depend karte hain. Videos + practical direction included hai.
+          Note: Training outcomes aapki practice, skill aur consistency par depend karte hain. Job,
+          placement ya income guaranteed nahi hai. Videos + practical direction included hai.
+        </p>
+        <p className="mt-1 text-[10.5px]">
+          © {new Date().getFullYear()} Indian Automobile Doctor · 2427 NH5 Hitech Square, Pandra,
+          Bhubaneswar, Odisha 751010
         </p>
       </div>
     </footer>

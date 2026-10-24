@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Link from "next/link";
 import { useState } from "react";
@@ -24,7 +24,7 @@ const PRICE = "4999";
 
 const MODULES: CourseModule[] = [
   {
-    title: "Advance ECM Repairing",
+    title: "Advanced ECM Repairing",
     desc: "ECU/ECM component-level repair: track testing, IC replacement, soldering aur load-testing - workshop-grade practical ke saath.",
   },
   {
@@ -63,24 +63,24 @@ const MODULES: CourseModule[] = [
 ];
 
 const COMPARE = [
-  { label: "Advance ECM Repairing", starter: "✓ Included", mastery: "✓ Included" },
-  { label: "BS6 Diagnostic + Programming", starter: "✓ Included", mastery: "✓ Included" },
+  { label: "Advanced ECM Repairing", starter: "âœ“ Included", mastery: "âœ“ Included" },
+  { label: "BS6 Diagnostic + Programming", starter: "âœ“ Included", mastery: "âœ“ Included" },
   { label: "EV / Hybrid levels", starter: "Level 1-2", mastery: "Level 3-10" },
-  { label: "ABS · EPS · SRS", starter: "✓ Included", mastery: "✓ Included" },
-  { label: "BCM · Cluster Meter", starter: "✓ Included", mastery: "✓ Included" },
-  { label: "Engine Repair Training", starter: "✓ Included", mastery: "✓ Included" },
-  { label: "Premium-car practical videos", starter: "✓ Included", mastery: "✓ Included" },
-  { label: "Price (one-time)", starter: "₹999", mastery: "₹4,999" },
+  { label: "ABS Â· EPS Â· SRS", starter: "âœ“ Included", mastery: "âœ“ Included" },
+  { label: "BCM Â· Cluster Meter", starter: "âœ“ Included", mastery: "âœ“ Included" },
+  { label: "Engine Repair Training", starter: "âœ“ Included", mastery: "âœ“ Included" },
+  { label: "Premium-car practical videos", starter: "âœ“ Included", mastery: "âœ“ Included" },
+  { label: "Price (one-time)", starter: "â‚¹999", mastery: "â‚¹4,999" },
 ];
 
 const FAQS = [
   {
-    q: "Ye ₹4,999 Mastery Pack kis ke liye hai?",
+    q: "Ye â‚¹4,999 Mastery Pack kis ke liye hai?",
     a: "Unke liye jo sirf basics nahi, poora pro banna chahte hain - EV/Hybrid Level 3-10 tak advanced diagnostics aur programming ke saath saare modules ki mastery.",
   },
   {
-    q: "₹999 wale pack se exactly kya extra milega?",
-    a: "Saare 9 modules dono me same hain. Farak sirf EV/Hybrid ki depth ka hai: ₹999 me Level 1-2 (basics), isme Level 3-10 (BMS programming, controller tuning, CAN-bus deep diagnostics, hybrid drive systems).",
+    q: "â‚¹999 wale pack se exactly kya extra milega?",
+    a: "Saare 9 modules dono me same hain. Farak sirf EV/Hybrid ki depth ka hai: â‚¹999 me Level 1-2 (basics), isme Level 3-10 (BMS programming, controller tuning, CAN-bus deep diagnostics, hybrid drive systems).",
   },
   {
     q: "Training videos kaise milengi?",
@@ -92,7 +92,7 @@ const FAQS = [
   },
   {
     q: "Enroll kaise karun?",
-    a: "Neeche WhatsApp button dabao ya call karo - “Mastery Pack” likh ke bhejo, payment + access details turant mil jayengi.",
+    a: "Neeche WhatsApp button dabao ya call karo - â€œMastery Packâ€ likh ke bhejo, payment + access details turant mil jayengi.",
   },
 ];
 
@@ -111,7 +111,7 @@ export default function MasteryView() {
         <div className="mx-auto w-full max-w-6xl lg:grid lg:grid-cols-[1.02fr_0.98fr] lg:items-start lg:gap-12">
           <div className="text-center lg:text-left">
             <p className="h-reveal inline-block -rotate-1 rounded-md border-2 border-[#f45000] bg-[#f45000]/10 px-3 py-1 text-[11px] font-bold uppercase tracking-[1.5px] text-[#ff8a4d]">
-              Mastery Pack · Level 3-10 · Hindi
+              Mastery Pack Â· Level 3-10 Â· Hindi
             </p>
             <h1 className="h-reveal mt-4 text-[26px] font-extrabold leading-[1.15] tracking-tight text-white sm:text-[34px] lg:text-[42px]">
               Sirf mechanic nahi -{" "}
@@ -143,23 +143,23 @@ export default function MasteryView() {
           <div className="mt-6 lg:mt-0">
             <div className="h-reveal overflow-hidden rounded-2xl border-2 border-[#f45000] bg-white text-[#131a26] shadow-[0_16px_44px_rgba(244,80,0,0.22)]">
               <div className="bg-[#f45000] px-5 py-3 text-center">
-                <p className="text-[11px] font-bold uppercase tracking-[2px] text-white/80">★ Most complete · Mastery Pack</p>
+                <p className="text-[11px] font-bold uppercase tracking-[2px] text-white/80">â˜… Most complete Â· Mastery Pack</p>
                 <p className="font-display mt-1 text-[44px] font-bold leading-none text-white">
-                  ₹4,999 <span className="text-[14px] font-semibold text-white/70">one-time</span>
+                  â‚¹4,999 <span className="text-[14px] font-semibold text-white/70">one-time</span>
                 </p>
               </div>
               <ul className="space-y-2 px-5 py-4 text-[13px] font-medium">
                 {[
-                  "Advance ECM Repairing (pro depth)",
+                  "Advanced ECM Repairing (pro depth)",
                   "BS6 Diagnostic + Programming",
                   "EV / Hybrid - Level 3 to 10",
-                  "ABS · EPS · SRS advanced",
-                  "BCM · Cluster Meter coding",
+                  "ABS Â· EPS Â· SRS advanced",
+                  "BCM Â· Cluster Meter coding",
                   "Engine Repair Training",
                   "Premium-car practical videos",
                 ].map((t) => (
                   <li key={t} className="flex items-start gap-2.5">
-                    <span className="mt-0.5 grid h-5 w-5 shrink-0 place-items-center rounded-full bg-[#15803d] text-[10px] font-bold text-white">✓</span>
+                    <span className="mt-0.5 grid h-5 w-5 shrink-0 place-items-center rounded-full bg-[#15803d] text-[10px] font-bold text-white">âœ“</span>
                     {t}
                   </li>
                 ))}
@@ -171,11 +171,11 @@ export default function MasteryView() {
                   price={PRICE}
                   className="btn-brand group block w-full rounded-xl px-4 py-3.5 text-center text-[14px] font-extrabold uppercase text-white disabled:cursor-wait disabled:opacity-70"
                 >
-                  Pay ₹4,999 & enroll now
-                  <span className="ml-1 inline-block transition-transform duration-200 group-hover:translate-x-1">→</span>
+                  Pay â‚¹4,999 & enroll now
+                  <span className="ml-1 inline-block transition-transform duration-200 group-hover:translate-x-1">â†’</span>
                 </PayButton>
                 <p className="mt-2 text-center text-[11px] text-[#5b6572]">
-                  Secure UPI / card payment · Access link turant milega
+                  Secure UPI / card payment Â· Access link turant milega
                 </p>
               </div>
             </div>
@@ -251,7 +251,7 @@ export default function MasteryView() {
           <div className="mx-auto max-w-2xl text-center">
             <p className="h-reveal text-[11px] font-bold uppercase tracking-[2px] text-[#f45000]">Confusion clear</p>
             <h2 className="h-reveal mt-1 text-[24px] font-extrabold tracking-tight sm:text-[30px]">
-              ₹999 vs ₹4,999 - farak kya hai?
+              â‚¹999 vs â‚¹4,999 - farak kya hai?
             </h2>
             <p className="h-reveal mt-1.5 text-[13px] text-[#5b6572]">
               Dono me saare 9 modules same hain. Sirf EV/Hybrid ki depth alag hai, aur wahi sabse bada farak hai.
@@ -263,7 +263,7 @@ export default function MasteryView() {
           <p className="h-reveal mx-auto mt-4 max-w-2xl rounded-xl bg-[#fff6ec] p-4 text-center text-[13px] font-semibold">
             L3-L10 wale kaam ka market rate sabse upar hai - isliye ye pack pro log lete hain. Budget tight ho to{" "}
             <Link href="/starter" className="font-extrabold text-[#f45000] underline">
-              ₹999 Foundation se start karo →
+              â‚¹999 Foundation se start karo â†’
             </Link>
           </p>
         </div>
@@ -280,10 +280,10 @@ export default function MasteryView() {
           </div>
           <div className="mt-5 grid gap-2.5 sm:grid-cols-2 lg:grid-cols-4">
             {[
-              ["🔧 Working mechanics", "Roz ke faults minute me pakdo - advanced scanner command."],
-              ["🏠 Garage owners", "Premium + EV gaadiyon ka kaam khud karo, bahar mat bhejo."],
-              ["🎓 Serious students", "Degree ke saath L3-L10 skill - placement me sabse aage."],
-              ["🚀 Future entrepreneurs", "EV service setup ka poora technical base yahin se."],
+              ["ðŸ”§ Working mechanics", "Roz ke faults minute me pakdo - advanced scanner command."],
+              ["ðŸ  Garage owners", "Premium + EV gaadiyon ka kaam khud karo, bahar mat bhejo."],
+              ["ðŸŽ“ Serious students", "Degree ke saath L3-L10 skill - placement me sabse aage."],
+              ["ðŸš€ Future entrepreneurs", "EV service setup ka poora technical base yahin se."],
             ].map(([t, d], i) => (
               <div
                 key={t as string}
@@ -303,10 +303,10 @@ export default function MasteryView() {
         <div className="mx-auto w-full max-w-2xl text-center">
           <p className="h-reveal text-[11px] font-bold uppercase tracking-[2px] text-[#f45000]">Enroll karo</p>
           <h2 className="h-reveal mt-1 text-[24px] font-extrabold tracking-tight sm:text-[30px]">
-            Mastery Pack - sirf ₹4,999
+            Mastery Pack - sirf â‚¹4,999
           </h2>
           <p className="h-reveal mt-1.5 text-[13px] text-[#5b6572]">
-            One-time payment · L3-L10 + saari practical videos included · WhatsApp support
+            One-time payment Â· L3-L10 + saari practical videos included Â· WhatsApp support
           </p>
           <div className="h-reveal mx-auto mt-5 max-w-md">
             <DualCta pack={PACK} price={PRICE} payPack="mastery" />

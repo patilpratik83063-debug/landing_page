@@ -16,9 +16,10 @@ const barlow = Barlow_Condensed({
   display: "swap",
 });
 
-const TITLE = "Certified EV Technician Masterclass | Indian Automobile Doctor";
+const SITE_NAME = "Indian Automobile Doctor";
+const TITLE = "EV, BS6 & Hybrid Diagnostics Training in Hindi | Indian Automobile Doctor";
 const DESCRIPTION =
-  "Learn how to become a certified EV technician in the next 60 days and earn up to Rs. 50,000 per month. EV Battery, BMS, Motor Controller, BS6 Diagnostics, Hybrid & Scanner-based troubleshooting. Live masterclass just ₹29.";
+  "Practical automotive diagnostics training in simple Hindi - Advanced ECM repair, BS6 programming, EV and hybrid systems, ABS, EPS, SRS, BCM and cluster. Foundation Pack ₹999 (9 modules) and Mastery Pack ₹4,999 (Level 3-10).";
 
 const SITE_URL =
   process.env.NEXT_PUBLIC_SITE_URL ??
@@ -26,23 +27,33 @@ const SITE_URL =
     ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
     : "http://localhost:3000");
 
+const OG_IMAGE = {
+  url: "/media/poster-main.jpg",
+  width: 1920,
+  height: 1080,
+  alt: "Indian Automobile Doctor practical diagnostics training on premium cars",
+};
+
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: TITLE,
   description: DESCRIPTION,
+  applicationName: SITE_NAME,
+  alternates: { canonical: "/" },
   openGraph: {
     title: TITLE,
     description: DESCRIPTION,
     type: "website",
     locale: "en_IN",
-    siteName: "Indian Automobile Doctor",
-    images: [{ url: "/media/workshop-panels.jpg", width: 1024, height: 492 }],
+    siteName: SITE_NAME,
+    url: "/",
+    images: [OG_IMAGE],
   },
   twitter: {
     card: "summary_large_image",
     title: TITLE,
     description: DESCRIPTION,
-    images: ["/media/workshop-panels.jpg"],
+    images: [OG_IMAGE.url],
   },
 };
 
