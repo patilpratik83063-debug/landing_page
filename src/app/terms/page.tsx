@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { LegalSection, LegalShell } from "@/components/legal";
 
 export const metadata: Metadata = {
@@ -95,7 +96,7 @@ export default function TermsPage() {
 
       <LegalSection heading="9. Refunds">
         <p>
-          Refunds are governed by our <a className="font-semibold underline" href="/refund">Refund Policy</a>.
+          Refunds are governed by our <Link className="font-semibold underline" href="/refund">Refund Policy</Link>.
         </p>
       </LegalSection>
 

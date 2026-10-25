@@ -1,8 +1,8 @@
 "use client";
 
 import Image from "next/image";
-import { Play } from "lucide-react";
-import { useState } from "react";
+import { Play, Volume2, VolumeX } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 
 function PlayDisc({ size = "lg" }: { size?: "lg" | "sm" }) {
   return (
@@ -13,6 +13,145 @@ function PlayDisc({ size = "lg" }: { size?: "lg" | "sm" }) {
     >
       <Play className={size === "lg" ? "ml-1 h-7 w-7 sm:h-8 sm:w-8" : "ml-0.5 h-5 w-5"} fill="currentColor" strokeWidth={0} />
     </span>
+  );
+}
+
+type NetworkInfo = { saveData?: boolean; effectiveType?: string };
+
+/**
+ * Autoplaying muted preview reel for the top of the page.
+ *
+ * Speed-first rules:
+ * - the poster is the LCP image; the clip is only attached after mount
+ * - a smaller mobile encode is picked at runtime
+ * - no download at all on save-data / 2G, or when the user prefers reduced motion
+ * - the centre play button is the fallback when autoplay is blocked
+ */
+export function HeroReel({
+  src = "/videos/hero-reel.mp4",
+  mobileSrc = "/videos/hero-reel-sm.mp4",
+  poster = "/media/promo-poster.jpg",
+  title = "EV Career Revolution masterclass - 20 second preview",
+}: {
+  src?: string;
+  mobileSrc?: string;
+  poster?: string;
+  title?: string;
+}) {
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const [videoSrc, setVideoSrc] = useState<string | null>(null);
+  const [playing, setPlaying] = useState(false);
+  const [muted, setMuted] = useState(true);
+  const [failed, setFailed] = useState(false);
+  const [reduced, setReduced] = useState(false);
+
+  useEffect(() => {
+    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const update = () => setReduced(mq.matches);
+    update();
+    mq.addEventListener("change", update);
+    return () => mq.removeEventListener("change", update);
+  }, []);
+
+  useEffect(() => {
+    if (reduced) return;
+    const conn = (navigator as Navigator & { connection?: NetworkInfo }).connection;
+    if (conn?.saveData || conn?.effectiveType === "slow-2g" || conn?.effectiveType === "2g") return;
+
+    const pick = () => {
+      const small = window.matchMedia("(max-width: 640px)").matches;
+      setVideoSrc(small ? mobileSrc : src);
+    };
+    if (typeof window.requestIdleCallback === "function") {
+      const id = window.requestIdleCallback(pick, { timeout: 2000 });
+      return () => window.cancelIdleCallback(id);
+    }
+    const t = window.setTimeout(pick, 800);
+    return () => window.clearTimeout(t);
+  }, [reduced, mobileSrc, src]);
+
+  function playNow() {
+    const v = videoRef.current;
+    if (v?.src) {
+      void v.play().then(() => setPlaying(true)).catch(() => setFailed(true));
+      return;
+    }
+    const small = window.matchMedia("(max-width: 640px)").matches;
+    setVideoSrc(small ? mobileSrc : src);
+  }
+
+  function retry() {
+    setFailed(false);
+    setVideoSrc(src);
+  }
+
+  return (
+    <div
+      className="group relative aspect-video overflow-hidden rounded-2xl border border-[#131a26]/10 bg-[#0e1626] shadow-[0_18px_44px_rgba(19,26,38,0.18)]"
+      aria-label={title}
+    >
+      <Image
+        src={poster}
+        alt=""
+        fill
+        priority
+        sizes="(min-width: 1024px) 45vw, 100vw"
+        className="object-cover opacity-90"
+      />
+
+      {videoSrc && !failed && (
+        <video
+          ref={videoRef}
+          src={videoSrc}
+          autoPlay
+          muted={muted}
+          loop
+          playsInline
+          preload="auto"
+          aria-hidden="true"
+          tabIndex={-1}
+          onPlaying={() => setPlaying(true)}
+          onPause={() => setPlaying(false)}
+          onError={() => (videoSrc === src ? setFailed(true) : retry())}
+          className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-700 ${
+            playing ? "opacity-100" : "opacity-0"
+          }`}
+        />
+      )}
+
+      <span className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
+
+      {!playing && (
+        <button
+          type="button"
+          onClick={playNow}
+          aria-label={`Play preview: ${title}`}
+          className="absolute inset-0 grid h-full w-full place-items-center"
+        >
+          <span className="flex flex-col items-center gap-2.5">
+            <PlayDisc />
+            <span className="px-6 text-center text-[12px] font-semibold text-white drop-shadow sm:text-[13px]">
+              {failed ? "Preview unavailable - tap to retry" : "Tap to play the 20 sec preview"}
+            </span>
+          </span>
+        </button>
+      )}
+
+      {playing && (
+        <button
+          type="button"
+          onClick={() => setMuted((m) => !m)}
+          aria-label={muted ? "Unmute preview" : "Mute preview"}
+          className="absolute bottom-2.5 right-2.5 z-10 grid h-9 w-9 place-items-center rounded-full bg-black/60 text-white backdrop-blur transition hover:bg-black/80"
+        >
+          {muted ? <VolumeX className="h-4 w-4" strokeWidth={2.25} /> : <Volume2 className="h-4 w-4" strokeWidth={2.25} />}
+        </button>
+      )}
+
+      <span className="pointer-events-none absolute bottom-2.5 left-3 z-10 rounded-md bg-black/60 px-2 py-0.5 text-[10px] font-bold text-white">
+        Live practical preview · 0:20
+      </span>
+    </div>
   );
 }
 
@@ -39,7 +178,7 @@ export function LocalVideo({
           controls
           autoPlay
           playsInline
-          preload="auto"
+          preload="metadata"
         />
       ) : (
         <button
@@ -216,7 +355,7 @@ export function HeroVideo({
           controls
           autoPlay
           playsInline
-          preload="auto"
+          preload="metadata"
         />
       ) : (
         <button

@@ -17,9 +17,9 @@ const barlow = Barlow_Condensed({
 });
 
 const SITE_NAME = "Indian Automobile Doctor";
-const TITLE = "EV, BS6 & Hybrid Diagnostics Training in Hindi | Indian Automobile Doctor";
+const TITLE = "EV, BS6 & Hybrid Masterclass in Hindi - ₹29 Seat | IAD";
 const DESCRIPTION =
-  "Practical automotive diagnostics training in simple Hindi - Advanced ECM repair, BS6 programming, EV and hybrid systems, ABS, EPS, SRS, BCM and cluster. Foundation Pack ₹999 (9 modules) and Mastery Pack ₹4,999 (Level 3-10).";
+  "Live EV, BS6 & Hybrid diagnostics masterclass in simple Hindi - ₹29 seat (worth ₹999). 90 min + Q&A, 60-day roadmap. Today 8 PM IST on Zoom.";
 
 const SITE_URL =
   process.env.NEXT_PUBLIC_SITE_URL ??

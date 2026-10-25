@@ -1,15 +1,13 @@
 "use client";
 
-import { Play } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { CALL_NUMBER, useReveal, useScrolled } from "@/components/course-blocks";
-import { RecognitionWall, VideoShowcase } from "@/components/media";
+import { HeroReel, RecognitionWall, VideoShowcase } from "@/components/media";
 import PayButton from "@/components/pay-button";
 
 const PAYMENT_URL = "https://workshop.indianautomobiledoctor.com/payment";
-const YT_ID = "tXWN5T-bd1k";
 
 /* Evergreen deadline: next 8 PM IST (masterclass runs daily).
    Static June date already passed, so timer was stuck at 00:00:00. */
@@ -148,12 +146,17 @@ function BookButton({ small }: { small?: boolean }) {
       price="29"
       fallbackHref={PAYMENT_URL}
       className={`btn-brand group block w-full rounded-xl text-center font-bold uppercase tracking-wide text-white disabled:cursor-wait disabled:opacity-70 ${
-        small ? "px-4 py-3 text-[13px]" : "px-6 py-4 text-[15px] sm:text-base"
+        small ? "px-4 py-3 text-[13px]" : "px-6 py-4 text-[14px] sm:text-base"
       }`}
     >
-      <span className="mr-2 font-medium normal-case text-white/70 line-through">₹999</span>
-      Yes! Book my seat @ ₹29
-      <span className="ml-1 inline-block transition-transform duration-200 group-hover:translate-x-1">→</span>
+      <span className="inline-flex flex-wrap items-baseline justify-center gap-x-1.5 gap-y-0.5">
+        <span className="whitespace-nowrap">Book my seat ·</span>
+        <span className="whitespace-nowrap">
+          <span className="font-medium text-white/65 line-through">₹999</span>{" "}
+          <span className="text-[1.18em] leading-none">₹29</span>
+          <span className="ml-1 inline-block transition-transform duration-200 group-hover:translate-x-1">→</span>
+        </span>
+      </span>
     </PayButton>
   );
 }
@@ -163,8 +166,6 @@ export default function Home() {
   const [viewers, setViewers] = useState(581);
   const [proofIdx, setProofIdx] = useState(0);
   const [showProof, setShowProof] = useState(false);
-  const [videoOn, setVideoOn] = useState(false);
-  const [thumb, setThumb] = useState("maxresdefault");
   const [faqOpen, setFaqOpen] = useState<number | null>(0);
   const headerShadow = useScrolled(8);
   useReveal();
@@ -301,52 +302,9 @@ export default function Home() {
               </div>
             </div>
 
-            {/* video */}
-            <div className="h-reveal group mt-3">
-              <div
-                className="relative aspect-video cursor-pointer overflow-hidden rounded-2xl border border-[#131a26]/10 bg-[#0e1626] shadow-[0_18px_44px_rgba(19,26,38,0.18)]"
-                role={videoOn ? undefined : "button"}
-                tabIndex={videoOn ? undefined : 0}
-                aria-label={videoOn ? undefined : "Play video: EV Career Revolution Masterclass"}
-                onClick={() => setVideoOn(true)}
-                onKeyDown={(e) => {
-                  if (!videoOn && (e.key === "Enter" || e.key === " ")) {
-                    e.preventDefault();
-                    setVideoOn(true);
-                  }
-                }}
-              >
-                {!videoOn ? (
-                  <>
-                    <Image
-                      src={`https://img.youtube.com/vi/${YT_ID}/${thumb}.jpg`}
-                      alt="EV Career Revolution Masterclass"
-                      fill
-                      priority
-                      sizes="(min-width: 1024px) 45vw, 100vw"
-                      onError={() => setThumb("hqdefault")}
-                      className="object-cover opacity-80 transition duration-500 group-hover:scale-[1.02] group-hover:opacity-90"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-transparent" />
-                    <div className="absolute inset-0 flex flex-col items-center justify-center gap-2.5">
-                      <span className="grid h-16 w-16 place-items-center rounded-full bg-[#f45000] text-white shadow-[0_10px_30px_rgba(244,80,0,0.5)] ring-4 ring-white/25 transition duration-300 group-hover:scale-110">
-                        <Play className="ml-1 h-7 w-7" fill="currentColor" strokeWidth={0} />
-                      </span>
-                      <p className="px-6 text-[12.5px] font-semibold text-white">
-                        Watch: how EV technicians actually get work
-                      </p>
-                    </div>
-                  </>
-                ) : (
-                  <iframe
-                    className="absolute inset-0 h-full w-full"
-                    src={`https://www.youtube.com/embed/${YT_ID}?autoplay=1&rel=0`}
-                    title="EV Career Masterclass"
-                    allow="autoplay; encrypted-media; picture-in-picture"
-                    allowFullScreen
-                  />
-                )}
-              </div>
+            {/* video - muted autoplay reel, no YouTube embed */}
+            <div className="h-reveal mt-3">
+              <HeroReel />
             </div>
 
             <div className="h-reveal mt-4 lg:hidden">
@@ -481,7 +439,7 @@ export default function Home() {
             {[
               ["The 60-day roadmap", "Certified EV technician banne ka exact step-by-step plan - kya, kab, kaise."],
               ["Battery, BMS, motor", "Ye 3 skills aapko normal mechanic se 10x valuable banati hain. Kaise seekhein, live samjhiye."],
-              ["BS6 · EV · Hybrid, simplified", "Confusing jargon nahi - kaam ki भाषा mein samajh, taaki customer ko confident jawab de sako."],
+              ["BS6 · EV · Hybrid, simplified", "Confusing jargon nahi - kaam ki bhasha mein samajh, taaki customer ko confident jawab de sako."],
               ["Scanner + OBD diagnostics", "Live data reading, fault codes, aur woh mistakes jo 90% beginners karte hain."],
               ["Job, internship, apna garage", "Naukri, freelance diagnosis ya EV garage - teeno raste, aur pehla kadam kya ho."],
               ["Outdated hone se bachna", "Kaunsi skills chhodni hain, kaunsi pakadni hain - 2026 ke hisaab se seedhi baat."],
@@ -685,7 +643,7 @@ export default function Home() {
               <p className="mt-0.5 text-[12px] font-semibold text-[#f45000]">Founder & CEO, Automobile Doctor India Pvt. Ltd.</p>
               <p className="mt-3 text-[13px] leading-relaxed text-[#3d4756]">
                 20+ saal auto market me. 1000+ students train kiye, 76,000+ auto community serve ki.
-                BS6 · EV · Hybrid ka poora tajurba - ek shaam me, seedhi भाषा me.
+                BS6 · EV · Hybrid ka poora tajurba - ek shaam me, seedhi bhasha me.
               </p>
               <div className="mt-3 flex flex-wrap gap-1.5">
                 {["1000+ students", "20+ yrs", "76k+ community"].map((b) => (
@@ -856,7 +814,7 @@ export default function Home() {
       >
         <div className="mx-auto flex w-full max-w-6xl items-center justify-between gap-3">
           <div>
-            <p className="text-[13px] font-extrabold">₹29 <span className="text-[11px] font-medium text-[#5b6572] line-through">₹999</span></p>
+            <p className="text-[13px] font-extrabold"><span className="text-[11px] font-medium text-[#5b6572] line-through">₹999</span> ₹29</p>
             <p className="font-mono text-[11px] font-bold tabular-nums text-[#f45000]">{time.h}h : {time.m}m : {time.s}s left</p>
           </div>
           <div className="shrink-0">
