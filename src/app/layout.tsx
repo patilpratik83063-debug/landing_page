@@ -17,9 +17,9 @@ const barlow = Barlow_Condensed({
 });
 
 const SITE_NAME = "Indian Automobile Doctor";
-const TITLE = "EV, BS6 & Hybrid Masterclass in Hindi - ₹29 Seat | IAD";
+const TITLE = "EV, BS6 & Hybrid Masterclass - ₹29 Seat | IAD";
 const DESCRIPTION =
-  "Live EV, BS6 & Hybrid diagnostics masterclass in simple Hindi - ₹29 seat (worth ₹999). 90 min + Q&A, 60-day roadmap. Today 8 PM IST on Zoom.";
+  "Live EV, BS6 & Hybrid diagnostics masterclass - ₹29 seat (worth ₹999). 90 min + Q&A, 60-day roadmap. Today 8 PM IST on Zoom.";
 
 const SITE_URL =
   process.env.NEXT_PUBLIC_SITE_URL ??

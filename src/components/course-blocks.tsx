@@ -8,8 +8,8 @@ import PayButton, { PayPack } from "./pay-button";
 export const WA_NUMBER = "918093777701";
 export const CALL_NUMBER = "+91 80937 77701";
 
-export function waLink(pack: string, price: string): string {
-  const msg = `Namaste! Mujhe ${pack} (₹${price}) join karna hai. Details bhejiye.`;
+export function waLink(pack: string, price: string, extra?: string): string {
+  const msg = `Hello! I would like to join ${pack} (₹${price}). Please share the details.${extra ? ` ${extra}` : ""}`;
   return `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(msg)}`;
 }
 
@@ -166,7 +166,7 @@ export function CompareTable({
   return (
     <div className="h-reveal overflow-hidden rounded-2xl border border-[#eadfd2]">
       <div className="grid grid-cols-[1.3fr_1fr_1fr] bg-[#131a26] text-white">
-        <p className="px-3 py-3 text-[11px] font-bold uppercase tracking-wider sm:px-4">Kya milega</p>
+        <p className="px-3 py-3 text-[11px] font-bold uppercase tracking-wider sm:px-4">What you get</p>
         <p
           className={`px-2 py-3 text-center text-[11px] font-extrabold uppercase tracking-wider sm:text-[12px] ${
             highlight === "starter" ? "bg-[#f45000]" : "text-white/60"
@@ -174,12 +174,13 @@ export function CompareTable({
         >
           ₹999 Pack
         </p>
+
         <p
           className={`px-2 py-3 text-center text-[11px] font-extrabold uppercase tracking-wider sm:text-[12px] ${
             highlight === "mastery" ? "bg-[#f45000]" : "text-white/60"
           }`}
         >
-          ₹4999 Pack
+          ₹4,999 Pack
         </p>
       </div>
       {rows.map((r, i) => (
@@ -217,24 +218,25 @@ export function DualCta({ pack, price, payPack }: { pack: string; price: string;
       <PayButton
         pack={payPack}
         price={price}
+        fallbackHref={waLink(pack, price)}
         className="btn-brand group block w-full rounded-xl px-4 py-3.5 text-center text-[14px] font-extrabold uppercase tracking-wide text-white disabled:cursor-wait disabled:opacity-70"
       >
         Pay ₹{price} &amp; get instant access
         <span className="ml-1 inline-block transition-transform duration-200 group-hover:translate-x-1">→</span>
       </PayButton>
       <p className="mt-2 flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-[11.5px] text-[#5b6572]">
-        <span className="font-semibold text-[#131a26]">Secure UPI / card · Access turant</span>
+        <span className="font-semibold text-[#131a26]">Secure UPI / card · Instant access</span>
         <a
           href={waLink(pack, price)}
           target="_blank"
           rel="noopener noreferrer"
           className="inline-flex items-center gap-1 font-bold text-[#15803d] underline decoration-[#15803d]/30 underline-offset-2 hover:decoration-[#15803d]"
         >
-          <MessageCircle className="h-3.5 w-3.5" strokeWidth={2.25} /> Doubt hai? Puchho
+          <MessageCircle className="h-3.5 w-3.5" strokeWidth={2.25} /> Questions? Ask us
         </a>
       </p>
       <div className="mt-3 flex flex-wrap justify-center gap-1.5">
-        {["Hindi me training", "9 practical modules", "WhatsApp support", "One-time payment"].map((t) => (
+        {["Beginner friendly", "9 practical modules", "WhatsApp support", "One-time payment"].map((t) => (
           <span key={t} className="rounded-full bg-[#15803d]/10 px-2.5 py-1 text-[10.5px] font-bold text-[#15803d]">
             {t}
           </span>
@@ -293,14 +295,14 @@ export function CourseFaq({
 
 export function AfterPayment({ pack }: { pack: string }) {
   const steps = [
-    ["1", "Pay securely", "UPI, card ya netbanking se one-time payment. Payment Razorpay ke secure checkout se hota hai."],
-    ["2", "Access turant pao", `Payment ke turant baad ${pack} ki training videos ka access link WhatsApp aur email par milta hai.`],
-    ["3", "Shuru karo", "Video dekhna shuru karo. Koi bhi doubt ho to usi WhatsApp number par puchho - team help karti hai."],
+    ["1", "Pay securely", "One-time payment by UPI, card or netbanking through Razorpay's secure checkout."],
+    ["2", "Get instant access", `Right after payment, the access link for the ${pack} training videos arrives on WhatsApp and email.`],
+    ["3", "Start learning", "Start watching the videos. If you have any question, message us on the same WhatsApp number - the team helps you out."],
   ] as const;
   return (
     <div className="h-reveal mt-6 rounded-2xl border-2 border-dashed border-[#f45000]/40 bg-[#fff6ec] p-5 sm:p-6">
       <p className="text-center text-[11px] font-extrabold uppercase tracking-[2px] text-[#f45000]">
-        Payment ke baad kya hoga?
+        What happens after payment?
       </p>
       <div className="mt-4 grid gap-3 sm:grid-cols-3">
         {steps.map(([n, t, d]) => (
@@ -314,7 +316,7 @@ export function AfterPayment({ pack }: { pack: string }) {
         ))}
       </div>
       <p className="mt-3 text-center text-[11.5px] font-semibold text-[#5b6572]">
-        Koi dikkat aaye to isi number par call/WhatsApp karo - team turant help karegi
+        If anything goes wrong, call or WhatsApp this number - the team will help immediately
       </p>
     </div>
   );
@@ -346,6 +348,7 @@ export function StickyCourseBar({ pack, price, payPack }: { pack: string; price:
           <PayButton
             pack={payPack}
             price={price}
+            fallbackHref={waLink(pack, price)}
             className="btn-wa rounded-xl px-5 py-3 text-[13px] font-extrabold uppercase disabled:opacity-70"
           >
             Enroll →
@@ -363,7 +366,7 @@ export function CourseFooter({ pack, price }: { pack: string; price: string }) {
         <div>
           <p className="text-[13px] font-bold text-white">Indian Automobile Doctor (IAD)</p>
           <p className="mt-2 max-w-md">
-            20+ saal se auto market me. EV, BS6, Hybrid, diagnostics aur ECU programming ki practical training.
+            20+ years in the auto market. Practical training in EV, BS6, Hybrid, diagnostics and ECU programming.
           </p>
           <p className="mt-2">
             Call/WhatsApp: <span className="text-white/85">{CALL_NUMBER}</span>
@@ -382,7 +385,7 @@ export function CourseFooter({ pack, price }: { pack: string; price: string }) {
           <p className="mt-2 flex flex-wrap justify-start gap-2 text-[11px] md:justify-end">
             <Link href="/" className="underline hover:text-white">Home</Link>
             <Link href="/starter" className="underline hover:text-white">₹999 Pack</Link>
-            <Link href="/mastery" className="underline hover:text-white">₹4999 Pack</Link>
+            <Link href="/mastery" className="underline hover:text-white">₹4,999 Pack</Link>
             <a href={waLink(pack, price)} target="_blank" rel="noopener noreferrer" className="underline hover:text-white">
               WhatsApp
             </a>
@@ -396,8 +399,8 @@ export function CourseFooter({ pack, price }: { pack: string; price: string }) {
       </div>
       <div className="mx-auto w-full max-w-6xl">
         <p className="mt-4 border-t border-white/10 pt-3 text-[10.5px]">
-          Note: Training outcomes aapki practice, skill aur consistency par depend karte hain. Job,
-          placement ya income guaranteed nahi hai. Videos + practical direction included hai.
+          Note: Training outcomes depend on your practice, skill and consistency. A job, placement or
+          income is not guaranteed. Videos and practical direction are included.
         </p>
         <p className="mt-1 text-[10.5px]">
           © {new Date().getFullYear()} Indian Automobile Doctor · 2427 NH5 Hitech Square, Pandra,

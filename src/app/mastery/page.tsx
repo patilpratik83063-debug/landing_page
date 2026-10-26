@@ -3,7 +3,7 @@ import MasteryView from "./MasteryView";
 
 const TITLE = "Mastery Pack ₹4,999 - EV/Hybrid Level 3-10 | IAD";
 const DESCRIPTION =
-  "Advanced ECM repair, BS6 programming and EV/Hybrid Level 3-10 pro diagnostics, plus ABS, EPS, SRS, BCM, cluster meter and engine repair - practical videos in Hindi on premium cars. One-time ₹4,999.";
+  "Advanced ECM repair, BS6 programming and EV/Hybrid Level 3-10 pro diagnostics, plus ABS, EPS, SRS, BCM, cluster meter and engine repair - practical videos on premium cars. One-time ₹4,999.";
 const OG_IMAGE = {
   url: "/media/poster-main.jpg",
   width: 1920,

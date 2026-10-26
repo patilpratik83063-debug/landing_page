@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { CALL_NUMBER, useReveal, useScrolled } from "@/components/course-blocks";
-import { HeroReel, RecognitionWall, VideoShowcase } from "@/components/media";
+import { HeroReel, REVIEW_SHOTS, RecognitionWall, VideoShowcase } from "@/components/media";
 import PayButton from "@/components/pay-button";
 
 const PAYMENT_URL = "https://workshop.indianautomobiledoctor.com/payment";
@@ -110,15 +110,6 @@ const PROOFS = [
   { n: "Priya Singh - Kolkata", msg: "Booked evening batch seat" },
 ];
 
-const TESTIMONIALS = [
-  { img: "/images/review-skoda-placement.jpg", title: "Rohan Sahu", tag: "Placed at Skoda, Pune" },
-  { img: "/images/review-student-growth.jpg", title: "Rohit", tag: "Basics se diagnosis tak" },
-  { img: "/images/review-workshop-owner.jpg", title: "Ritesh", tag: "Workshop owner" },
-  { img: "/images/review-service-technician.jpg", title: "Vikash", tag: "Service technician, Cuttack" },
-  { img: "/images/review-ecu-coding.jpg", title: "Imran", tag: "ECU coding practice" },
-  { img: "/images/review-self-employed.jpg", title: "Aditya", tag: "Mobile scanning service" },
-];
-
 const GALLERY = [
   { img: "/images/classroom-lecture.jpg", t: "Workshop training", s: "Practical session" },
   { img: "/images/practical-demo-class.jpg", t: "Live diagnostics", s: "Hands-on demo" },
@@ -130,11 +121,11 @@ const GALLERY = [
 
 const FAQS = [
   { q: "Is this masterclass free?", a: "No. The seat price is ₹29 (founder batch, worth ₹999)." },
-  { q: "Is this for beginners?", a: "Yes. Beginner, ITI / Diploma / Engineering student, mechanic, technician, garage owner or entrepreneur - session simple Hindi / Hinglish mein hoga." },
-  { q: "Will I get certified after only this masterclass?", a: "Masterclass gives you the complete 60-day roadmap. Certification needs the full practical training program." },
-  { q: "Is job, funding or income guaranteed?", a: "No. Outcomes depend on your skill, effort, training completion, market, location, interview performance and execution." },
-  { q: "What will I learn?", a: "EV, BS6, Hybrid, diagnostics, ECU/ECM programming, garage setup, career options and the 60-day roadmap - clear overview in 90 minutes." },
-  { q: "How do I get joining details?", a: "Payment ke baad WhatsApp + Email par joining link milta hai." },
+  { q: "Is this for beginners?", a: "Yes. Beginners, ITI / Diploma / Engineering students, mechanics, technicians, garage owners and entrepreneurs are all welcome. The session is delivered in simple, easy-to-follow language." },
+  { q: "Will I get certified after only this masterclass?", a: "The masterclass gives you the complete 60-day roadmap. Certification requires the full practical training program." },
+  { q: "Is a job, funding or income guaranteed?", a: "No. Outcomes depend on your skill, effort, training completion, market, location, interview performance and execution." },
+  { q: "What will I learn?", a: "EV, BS6, Hybrid, diagnostics, ECU/ECM programming, garage setup, career options and the 60-day roadmap - a clear overview in 90 minutes." },
+  { q: "How do I get the joining details?", a: "You receive the joining link on WhatsApp and email right after payment." },
 ];
 
 const BRANDS = ["Tata Motors", "Mahindra", "Maruti Suzuki", "Hyundai", "Kia", "MG Motor", "Toyota", "Mercedes-Benz"];
@@ -255,7 +246,7 @@ export default function Home() {
         <div className="mx-auto w-full max-w-6xl lg:grid lg:grid-cols-[1.02fr_0.98fr] lg:items-center lg:gap-12">
           <div className="text-center lg:text-left">
             <p className="h-reveal inline-block -rotate-1 rounded-md border-2 border-[#131a26] bg-white px-3 py-1 text-[11px] font-bold uppercase tracking-[1.5px]">
-              ● Live on Zoom · Hindi / Hinglish
+              ● Live on Zoom · Beginner friendly
             </p>
             <h1 className="h-reveal mt-4 text-[26px] font-extrabold leading-[1.15] tracking-tight sm:text-[34px] lg:text-[44px]">
               Become A{" "}
@@ -265,11 +256,11 @@ export default function Home() {
                   <path d="M3 7 Q 60 1 110 5 T 217 4" fill="none" stroke="#f45000" strokeWidth="3.5" strokeLinecap="round" opacity="0.45" />
                 </svg>
               </span>{" "}
-              - 60 Din Me Job-Ready Skill Banao
+              - Build Job-Ready Skills In 60 Days
             </h1>
             <p className="h-reveal mx-auto mt-3 max-w-xl text-[13.5px] leading-relaxed text-[#3d4756] sm:text-[15px] lg:mx-0">
               EV battery, BMS, motor controller, BS6 diagnostics, hybrid tech &amp; scanner-based
-              troubleshooting - sikhiye step-by-step, zero se.
+              troubleshooting - learn step by step, starting from zero.
             </p>
             <div className="h-reveal mt-5 hidden max-w-md lg:block">
               <BookButton />
@@ -337,10 +328,10 @@ export default function Home() {
         <div className="mx-auto w-full max-w-6xl">
           <div className="max-w-2xl">
             <h2 className="h-reveal text-[26px] font-extrabold tracking-tight text-white sm:text-[34px]">
-              Dekho, phir join karo
+              Watch first, then join
             </h2>
             <p className="h-reveal mt-2 max-w-xl text-[14px] leading-relaxed text-white/65">
-              Course preview aur live practical videos. Dekh lo training kaisi hoti hai, phir seat book karo.
+              Course preview and live practical videos. See how the training actually works, then book your seat.
             </p>
           </div>
           <VideoShowcase />
@@ -398,7 +389,7 @@ export default function Home() {
               ["Date", time.dateLong],
               ["Format", "Live Zoom call"],
               ["Duration", "90 min + Q&A"],
-              ["Language", "Hindi / Hinglish"],
+              ["Level", "Beginner to pro"],
             ].map(([l, v], i) => (
               <div
                 key={l}
@@ -437,12 +428,12 @@ export default function Home() {
           </div>
           <ol className="mt-5 grid gap-x-10 md:grid-cols-2">
             {[
-              ["The 60-day roadmap", "Certified EV technician banne ka exact step-by-step plan - kya, kab, kaise."],
-              ["Battery, BMS, motor", "Ye 3 skills aapko normal mechanic se 10x valuable banati hain. Kaise seekhein, live samjhiye."],
-              ["BS6 · EV · Hybrid, simplified", "Confusing jargon nahi - kaam ki bhasha mein samajh, taaki customer ko confident jawab de sako."],
-              ["Scanner + OBD diagnostics", "Live data reading, fault codes, aur woh mistakes jo 90% beginners karte hain."],
-              ["Job, internship, apna garage", "Naukri, freelance diagnosis ya EV garage - teeno raste, aur pehla kadam kya ho."],
-              ["Outdated hone se bachna", "Kaunsi skills chhodni hain, kaunsi pakadni hain - 2026 ke hisaab se seedhi baat."],
+              ["The 60-day roadmap", "The exact step-by-step plan to become a certified EV technician - what to do, when, and how."],
+              ["Battery, BMS, motor", "These 3 skills make you 10x more valuable than a regular mechanic. Learn how, live."],
+              ["BS6 · EV · Hybrid, simplified", "No confusing jargon - practical language you can use to answer customers with confidence."],
+              ["Scanner + OBD diagnostics", "Live data reading, fault codes, and the mistakes 90% of beginners make."],
+              ["Job, internship, your own garage", "A job, freelance diagnosis or your own EV garage - all three paths, and the first step."],
+              ["Staying future-proof", "Which skills to drop, which ones to build - straight talk for 2026."],
             ].map(([t, d], i) => (
               <li
                 key={t}
@@ -471,41 +462,32 @@ export default function Home() {
           <div className="max-w-2xl">
             <p className="h-reveal text-[11px] font-bold uppercase tracking-[2px] text-[#f45000]">Student stories</p>
             <h2 className="h-reveal mt-1 text-[24px] font-extrabold tracking-tight sm:text-[30px]">
-              Log kya keh rahe hain
+              What students are saying
             </h2>
             <p className="h-reveal mt-1.5 text-[13px] text-[#5b6572]">
-              Students, mechanics aur garage owners - IAD training ecosystem se.
+              Students, mechanics and garage owners - from the IAD training ecosystem.
             </p>
           </div>
           <div className="mt-5 grid grid-cols-1 gap-3 min-[420px]:grid-cols-2 lg:grid-cols-3">
-            {TESTIMONIALS.map((t, i) => (
+            {REVIEW_SHOTS.slice(0, 6).map((t, i) => (
               <figure
-                key={t.img}
-                className="h-reveal card-lift overflow-hidden rounded-xl border border-[#eadfd2] bg-white"
+                key={t.name}
+                className="h-reveal card-lift flex flex-col justify-between rounded-xl border border-[#eadfd2] bg-white p-4"
                 style={{ transitionDelay: `${(i % 3) * 80}ms` }}
               >
-                <div className="relative aspect-[4/5] overflow-hidden bg-[#e9e2d4]">
-                  <Image
-                    src={t.img}
-                    alt={t.title}
-                    fill
-                    sizes="(min-width: 1024px) 380px, (min-width: 420px) 50vw, 100vw"
-                    className="object-cover transition duration-500 hover:scale-[1.03]"
-                  />
-                </div>
-                <figcaption className="p-3">
-                  <p className="text-[12.5px] font-bold leading-snug">{t.title}</p>
-                  <p className="mt-0.5 text-[10.5px] font-medium text-[#5b6572]">{t.tag}</p>
-                  <p className="mt-1 text-[10px] font-bold tracking-wide uppercase text-[#15803d]">
-                    Real WhatsApp message
-                  </p>
+                <blockquote className="text-[13px] leading-relaxed text-[#3f4854]">
+                  &ldquo;{t.note}&rdquo;
+                </blockquote>
+                <figcaption className="mt-3 border-t border-[#eadfd2] pt-2.5">
+                  <p className="text-[12.5px] font-bold leading-snug">{t.name}</p>
+                  <p className="mt-0.5 text-[10.5px] font-medium text-[#5b6572]">{t.role}</p>
                 </figcaption>
               </figure>
             ))}
           </div>
           <p className="h-reveal mt-3 max-w-xl text-[10.5px] leading-relaxed text-[#5b6572]">
-            Screenshots students ne khud share kiye hain. Har student ka result alag hota hai - skill,
-            practice aur market par depend karta hai.
+            Feedback shared by students and translated into English. Every student&apos;s result is
+            different - it depends on skill, practice and the market.
           </p>
           <div className="h-reveal mt-6 max-w-md">
             <BookButton small />
@@ -517,18 +499,18 @@ export default function Home() {
       <section className="bg-white px-4 py-10 sm:px-6 lg:py-14">
         <div className="mx-auto w-full max-w-6xl">
           <div className="max-w-2xl">
-            <p className="h-reveal text-[11px] font-bold uppercase tracking-[2px] text-[#f45000]">Sach bolo…</p>
+            <p className="h-reveal text-[11px] font-bold uppercase tracking-[2px] text-[#f45000]">Let&apos;s be honest…</p>
             <h2 className="h-reveal mt-1 text-[24px] font-extrabold tracking-tight sm:text-[30px]">
-              Ye 5 me se koi 1 bhi lagta hai?
+              Does any one of these 5 sound familiar?
             </h2>
           </div>
           <ul className="mt-5 grid gap-2.5 md:grid-cols-2">
             {[
-              "BS6 / EV / Hybrid dekh ke lagta hai - “ye to mere bas ka nahi”?",
-              "Diagnose karne me dikkat hoti hai, scanner haath me leke dar lagta hai?",
-              "Lagta hai technology itni fast badal rahi, meri skill purani pad rahi hai?",
-              "Mehnat poori, par income aur growth wahi atki hui hai?",
-              "Mechanic, student ya garage owner ho - par future ka clear plan nahi hai?",
+              "Do BS6 / EV / Hybrid jobs make you feel, “this is beyond me”?",
+              "Do you struggle to diagnose faults and feel nervous holding a scanner?",
+              "Does it feel like technology is changing so fast that your skills are going stale?",
+              "Are you putting in the work, but income and growth are still stuck?",
+              "Are you a mechanic, student or garage owner with no clear plan for the future?",
             ].map((t, i) => (
               <li
                 key={t}
@@ -541,7 +523,7 @@ export default function Home() {
             ))}
           </ul>
           <p className="h-reveal mt-4 max-w-2xl rounded-xl bg-[#fff6ec] p-4 text-center text-[13.5px] font-semibold md:text-left">
-            Agar ek bhi point “haan, ye to mai hu” laga - to ye ₹29 wali evening aapke liye hi hai.
+            If even one point made you think “yes, that&apos;s me” - this ₹29 evening is meant for you.
           </p>
           <div className="h-reveal mt-5 max-w-md">
             <BookButton small />
@@ -555,7 +537,7 @@ export default function Home() {
           <div className="max-w-2xl">
             <p className="h-reveal text-[11px] font-bold uppercase tracking-[2px] text-white/50">Hands-on stack</p>
             <h2 className="h-reveal mt-1 text-[24px] font-extrabold tracking-tight text-white sm:text-[30px]">
-              Kaunsi technologies cover hongi
+              Which technologies are covered
             </h2>
           </div>
           <div className="h-reveal relative mt-5 aspect-[1024/492] overflow-hidden rounded-2xl border border-white/10 shadow-[0_24px_60px_rgba(0,0,0,0.4)]">
@@ -572,8 +554,8 @@ export default function Home() {
               ["Battery + BMS", "Pack assembly, wiring, cell balancing, thermal basics."],
               ["Motor + controller", "BLDC / hub motor, winding, programming, fault tracing."],
               ["Diagnostics", "OBD scanners, CAN-bus, live data, troubleshooting."],
-              ["Workshop practice", "Electric 2W / 3W kholna-jodna, real floor work."],
-              ["Garage setup", "Layout, tools, workflow, compliance - business lens se."],
+              ["Workshop practice", "Teardown and reassembly of electric 2W / 3W, real floor work."],
+              ["Garage setup", "Layout, tools, workflow, compliance - from a business point of view."],
               ["Supplier + career", "Spare network, placement direction, next steps."],
             ].map(([t, d], i) => (
               <div
@@ -589,13 +571,13 @@ export default function Home() {
 
           <div className="mt-10 max-w-3xl">
             <p className="h-reveal text-[11px] font-bold uppercase tracking-[2px] text-white/50">60-day roadmap</p>
-            <h3 className="h-reveal mt-1 text-[20px] font-extrabold text-white sm:text-[24px]">8 hafte, 4 steps</h3>
+            <h3 className="h-reveal mt-1 text-[20px] font-extrabold text-white sm:text-[24px]">8 weeks, 4 steps</h3>
             <ol className="mt-5">
               {[
-                ["1-2", "Basics pakke karo", "Circuit, multimeter, motor, high-voltage safety."],
-                ["3-4", "Battery master karo", "Lithium-ion, spot welding, pack + BMS programming."],
-                ["5-6", "Diagnostics seekho", "Wiring, sensors, OBD se fault pakadna + clear karna."],
-                ["7-8", "Real kaam + setup", "Poori gaadi teardown, garage planning, certification."],
+                ["1-2", "Build strong basics", "Circuits, multimeter, motor and high-voltage safety."],
+                ["3-4", "Master batteries", "Lithium-ion, spot welding, pack + BMS programming."],
+                ["5-6", "Learn diagnostics", "Find and clear faults using wiring, sensors and OBD."],
+                ["7-8", "Real work + setup", "Full vehicle teardown, garage planning, certification."],
               ].map(([w, t, d], i) => (
                 <li
                   key={w}
@@ -626,7 +608,7 @@ export default function Home() {
         <div className="mx-auto w-full max-w-6xl">
           <div className="max-w-2xl">
             <p className="h-reveal text-[11px] font-bold uppercase tracking-[2px] text-[#f45000]">Your mentor</p>
-            <h2 className="h-reveal mt-1 text-[24px] font-extrabold tracking-tight sm:text-[30px]">Sikha kaun raha hai?</h2>
+            <h2 className="h-reveal mt-1 text-[24px] font-extrabold tracking-tight sm:text-[30px]">Who is teaching?</h2>
           </div>
           <div className="h-reveal card-lift mx-auto mt-5 max-w-3xl overflow-hidden rounded-2xl border border-[#eadfd2] sm:grid sm:grid-cols-[240px_1fr]">
             <div className="relative aspect-[4/3] overflow-hidden bg-[#e9e2d4] sm:aspect-auto sm:min-h-[280px]">
@@ -642,8 +624,8 @@ export default function Home() {
               <p className="text-[18px] font-extrabold leading-tight">Mr. SK Salman Khurshid</p>
               <p className="mt-0.5 text-[12px] font-semibold text-[#f45000]">Founder & CEO, Automobile Doctor India Pvt. Ltd.</p>
               <p className="mt-3 text-[13px] leading-relaxed text-[#3d4756]">
-                20+ saal auto market me. 1000+ students train kiye, 76,000+ auto community serve ki.
-                BS6 · EV · Hybrid ka poora tajurba - ek shaam me, seedhi bhasha me.
+                20+ years in the auto market. 1000+ students trained, 76,000+ auto community served.
+                Full BS6 · EV · Hybrid experience - in one evening, in plain language.
               </p>
               <div className="mt-3 flex flex-wrap gap-1.5">
                 {["1000+ students", "20+ yrs", "76k+ community"].map((b) => (
@@ -660,7 +642,7 @@ export default function Home() {
         <div className="mx-auto w-full max-w-6xl">
           <div className="max-w-2xl">
             <p className="h-reveal text-[11px] font-bold uppercase tracking-[2px] text-[#f45000]">Proof wall</p>
-            <h2 className="h-reveal mt-1 text-[24px] font-extrabold tracking-tight sm:text-[30px]">Workshop ki jhalak</h2>
+            <h2 className="h-reveal mt-1 text-[24px] font-extrabold tracking-tight sm:text-[30px]">Inside the workshop</h2>
           </div>
           <div className="mt-5 grid grid-cols-2 gap-2.5 sm:grid-cols-3">
             {GALLERY.map((g, i) => (
@@ -690,14 +672,14 @@ export default function Home() {
       <section className="bg-white px-4 py-10 sm:px-6 lg:py-14">
         <div className="mx-auto w-full max-w-6xl">
           <div className="mx-auto max-w-2xl text-center">
-            <p className="h-reveal text-[11px] font-bold uppercase tracking-[2px] text-[#f45000]">Free ke saath</p>
-            <h2 className="h-reveal mt-1 text-[24px] font-extrabold tracking-tight sm:text-[30px]">Seat ke saath ye 3 bhi</h2>
+            <p className="h-reveal text-[11px] font-bold uppercase tracking-[2px] text-[#f45000]">Free with your seat</p>
+            <h2 className="h-reveal mt-1 text-[24px] font-extrabold tracking-tight sm:text-[30px]">3 bonuses with your seat</h2>
           </div>
           <div className="mx-auto mt-4 grid max-w-4xl gap-2.5 sm:grid-cols-3">
             {[
-              ["EV career checklist", "Future-ready banne ke exact skills."],
-              ["Garage setup guide", "Tools, vendors, service ka rasta."],
-              ["Certification roadmap", "Beginner → certified, 60 din."],
+              ["EV career checklist", "The exact skills you need to become future-ready."],
+              ["Garage setup guide", "Tools, vendors and a clear path into service."],
+              ["Certification roadmap", "Beginner → certified, in 60 days."],
             ].map(([t, d], i) => (
               <div
                 key={t}
@@ -716,12 +698,12 @@ export default function Home() {
               <span key={`bm-${time.m}`} className="h-tick inline-block">{time.m}</span>:
               <span key={`bs-${time.s}`} className="h-tick inline-block">{time.s}</span>
             </p>
-            <p className="mb-3 text-[11px] font-semibold text-[#5b6572]">ke baad founder-batch pricing band</p>
+            <p className="mb-3 text-[11px] font-semibold text-[#5b6572]">left before founder-batch pricing ends</p>
             <BookButton small />
           </div>
 
           <div className="mx-auto mt-10 max-w-2xl">
-            <h3 className="h-reveal text-[18px] font-extrabold sm:text-[20px]">Aksar puche jaane wale sawaal</h3>
+            <h3 className="h-reveal text-[18px] font-extrabold sm:text-[20px]">Frequently asked questions</h3>
             <div className="mt-3 overflow-hidden rounded-xl border border-[#f0e7d8]">
               {FAQS.map((f, i) => {
                 const open = faqOpen === i;
@@ -768,7 +750,7 @@ export default function Home() {
         <div className="mx-auto grid w-full max-w-6xl gap-6 md:grid-cols-[1.2fr_1fr]">
           <div>
             <p className="text-[13px] font-bold text-white">Indian Automobile Doctor (IAD)</p>
-            <p className="mt-2 max-w-md">20+ saal se auto market me. EV, BS6, Hybrid, diagnostics aur ECU programming ki practical training.</p>
+            <p className="mt-2 max-w-md">20+ years in the auto market. Practical training in EV, BS6, Hybrid, diagnostics and ECU programming.</p>
             <p className="mt-2">
               Call / WhatsApp: <a href={`tel:+918093777701`} className="text-white/85 hover:text-white">{CALL_NUMBER}</a>
               <span className="mx-1.5 text-white/30">|</span>
@@ -792,13 +774,13 @@ export default function Home() {
             >
               Book seat @ ₹29 →
             </a>
-            <p className="mt-2 text-[11px]">Live on Zoom, {time.when} 8 PM IST, in Hindi</p>
+            <p className="mt-2 text-[11px]">Live on Zoom, {time.when} 8 PM IST</p>
           </div>
         </div>
         <div className="mx-auto w-full max-w-6xl">
           <p className="mt-4 border-t border-white/10 pt-3 text-[10.5px]">
-            Note: Ye ek educational training hai. Job, placement ya income guaranteed nahi hai -
-            result aapki practice, skill aur market par depend karta hai.
+            Note: This is educational training. A job, placement or income is not guaranteed -
+            results depend on your practice, skill and the market.
           </p>
           <p className="mt-1 text-[10.5px]">
             © {new Date().getFullYear()} Indian Automobile Doctor · 2427 NH5 Hitech Square, Pandra,

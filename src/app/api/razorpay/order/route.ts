@@ -1,6 +1,9 @@
 import { NextResponse } from "next/server";
+import { sanitizeCustomer, type CustomerDetails } from "@/lib/customer";
 
 export const runtime = "nodejs";
+
+const API_BASE = (process.env.RAZORPAY_API_BASE ?? "https://api.razorpay.com/v1").replace(/\/$/, "");
 
 const PACKS = {
   masterclass: { amount: 2900, label: "EV Masterclass Seat" },
@@ -17,16 +20,26 @@ interface RazorpayOrder {
 }
 
 export async function POST(req: Request) {
-  let pack: unknown;
+  let body: { pack?: unknown; customer?: unknown };
   try {
-    pack = (await req.json())?.pack;
+    body = (await req.json()) as { pack?: unknown; customer?: unknown };
   } catch {
     return NextResponse.json({ error: "Invalid request body" }, { status: 400 });
   }
 
+  const pack = body.pack;
   if (typeof pack !== "string" || !(pack in PACKS)) {
     return NextResponse.json({ error: "Invalid pack" }, { status: 400 });
   }
+
+  const parsed = sanitizeCustomer(body.customer as { name?: unknown; phone?: unknown; email?: unknown });
+  if (!parsed.value) {
+    return NextResponse.json(
+      { error: "Please check your contact details.", fields: parsed.errors },
+      { status: 400 }
+    );
+  }
+  const customer: CustomerDetails = parsed.value;
   const id = pack as PackId;
 
   const keyId = process.env.RAZORPAY_KEY_ID;
@@ -41,7 +54,7 @@ export async function POST(req: Request) {
   const auth = Buffer.from(`${keyId}:${secret}`).toString("base64");
   let orderRes: Response;
   try {
-    orderRes = await fetch("https://api.razorpay.com/v1/orders", {
+    orderRes = await fetch(`${API_BASE}/orders`, {
       method: "POST",
       headers: {
         Authorization: `Basic ${auth}`,
@@ -51,7 +64,13 @@ export async function POST(req: Request) {
         amount: PACKS[id].amount,
         currency: "INR",
         receipt: `rcpt_${id}_${Date.now()}`,
-        notes: { pack: id, label: PACKS[id].label },
+        notes: {
+          pack: id,
+          label: PACKS[id].label,
+          name: customer.name,
+          phone: customer.phone,
+          email: customer.email,
+        },
       }),
     });
   } catch {
@@ -75,5 +94,6 @@ export async function POST(req: Request) {
     orderId: order.id,
     amount: order.amount,
     currency: order.currency,
+    prefill: customer,
   });
 }
