@@ -99,10 +99,21 @@ async function rpGet<T>(path: string): Promise<T> {
   return (await res.json()) as T;
 }
 
+function unwrapCollection<T>(payload: unknown): T[] {
+  if (Array.isArray(payload)) return payload as T[];
+  if (payload && typeof payload === "object") {
+    const items = (payload as { items?: unknown }).items;
+    if (Array.isArray(items)) return items as T[];
+    if ((payload as { count?: unknown }).count === 0) return [];
+  }
+  throw new Error("Unexpected response from Razorpay. Check that the API keys belong to an activated account.");
+}
+
 async function fetchPaged<T>(path: string, maxPages = 10): Promise<T[]> {
   const out: T[] = [];
   for (let page = 0; page < maxPages; page += 1) {
-    const batch = await rpGet<T[]>(`${path}?count=100&skip=${page * 100}`);
+    const payload = await rpGet<unknown>(`${path}?count=100&skip=${page * 100}`);
+    const batch = unwrapCollection<T>(payload);
     out.push(...batch);
     if (batch.length < 100) break;
   }
@@ -253,6 +264,7 @@ export function toCsv(rows: PaymentRow[]): string {
 
 export function formatIst(epochSeconds: number): string {
   if (!epochSeconds) return "-";
+  const ms = epochSeconds > 1e12 ? epochSeconds : epochSeconds * 1000;
   return new Intl.DateTimeFormat("en-IN", {
     timeZone: "Asia/Kolkata",
     day: "2-digit",
@@ -261,7 +273,7 @@ export function formatIst(epochSeconds: number): string {
     hour: "2-digit",
     minute: "2-digit",
     hour12: true,
-  }).format(new Date(epochSeconds * 1000));
+  }).format(new Date(ms));
 }
 
 export function inr(paise: number): string {
